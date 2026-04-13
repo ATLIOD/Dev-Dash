@@ -1,5 +1,15 @@
 package repositories
 
-// I need to research this osme more but apparently this is a common pattern in
-// REST apis. repository package that contains all the repositories for the application.
-// This way we can easily import the repositories in our handlers and services without having to worry about circular dependencies.
+import (
+	"github.com/jackc/pgx/v5/pgxpool"
+)
+
+type Repository struct {
+	User UserRepository
+}
+
+func New(db *pgxpool.Pool) *Repository {
+	return &Repository{
+		User: &userRepository{db: db},
+	}
+}
