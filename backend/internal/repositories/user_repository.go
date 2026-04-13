@@ -20,6 +20,8 @@ type userRepository struct {
 	db *pgxpool.Pool
 }
 
+// these should just be doing database stuff and passing results back
+//  from my understanding: no business logic here
 func (r *userRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
 	return nil, nil
 }

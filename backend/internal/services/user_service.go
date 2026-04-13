@@ -18,6 +18,8 @@ type userService struct {
 	userRepo repositories.UserRepository
 }
 
+// all of these basically just call the repo and do the other logic that is needed if any
+// they do not ever touch the database directly
 func (s *userService) GetByID(ctx context.Context, id string) (*models.UserResponse, error) {
 	return nil, nil
 }
