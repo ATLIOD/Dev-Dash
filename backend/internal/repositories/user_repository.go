@@ -10,7 +10,6 @@ import (
 type UserRepository interface {
 	GetByID(ctx context.Context, id string) (*models.User, error)
 	GetByEmail(ctx context.Context, email string) (*models.User, error)
-	List(ctx context.Context) ([]models.User, error)
 	Create(ctx context.Context, user *models.User) error
 	Update(ctx context.Context, user *models.User) error
 	Delete(ctx context.Context, id string) error
@@ -21,14 +20,66 @@ type userRepository struct {
 }
 
 // these should just be doing database stuff and passing results back
-//  from my understanding: no business logic here
+//
+//	from my understanding: no business logic here
 func (r *userRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
-	return nil, nil
+	query := `
+		SELECT id, name, email, created_at, updated_at
+		FROM users
+		WHERE id = $1
+	`
+	var user models.User
+	err := r.db.QueryRow(ctx, query, id).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
-	return nil, nil
+	query := `
+		SELECT id, name, email, created_at, updated_at
+		FROM users
+		WHERE email = $1
+	`
+	var user models.User
+	err := r.db.QueryRow(ctx, query, email).Scan(&user.ID, &user.Name, &user.Email, &user.CreatedAt, &user.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
-func (r *userRepository) List(ctx context.Context) ([]models.User, error)     { return nil, nil }
-func (r *userRepository) Create(ctx context.Context, user *models.User) error { return nil }
-func (r *userRepository) Update(ctx context.Context, user *models.User) error { return nil }
-func (r *userRepository) Delete(ctx context.Context, id string) error         { return nil }
+
+func (r *userRepository) Create(ctx context.Context, user *models.User) error {
+	query := `
+		INSERT INTO users (name, email)
+		VALUES ($1, $2)
+	`
+	_, err := r.db.Exec(ctx, query, user.Name, user.Email)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (r *userRepository) Update(ctx context.Context, user *models.User) error {
+	query := `
+		UPDATE users
+		SET name = $1, email = $2
+		WHERE id = $3
+	`
+	_, err := r.db.Exec(ctx, query, user.Name, user.Email, user.ID)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+func (r *userRepository) Delete(ctx context.Context, id string) error {
+	query := `
+		DELETE FROM users
+		WHERE id = $1
+	`
+	_, err := r.db.Exec(ctx, query, id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
