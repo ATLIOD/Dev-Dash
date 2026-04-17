@@ -3,7 +3,10 @@ package services
 import (
 	"DevDash/internal/models"
 	"DevDash/internal/repositories"
+	"DevDash/pkg/utils"
 	"context"
+	"errors"
+	"strings"
 )
 
 type UserService interface {
@@ -17,8 +20,6 @@ type userService struct {
 	userRepo repositories.UserRepository
 }
 
-// all of these basically just call the repo and do the other logic that is needed if any
-// they do not ever touch the database directly
 func (s *userService) GetByID(ctx context.Context, id string) (*models.UserResponse, error) {
 	user, err := s.userRepo.GetByID(ctx, id)
 	if err != nil {
@@ -27,12 +28,24 @@ func (s *userService) GetByID(ctx context.Context, id string) (*models.UserRespo
 	resp := user.ToResponse()
 	return &resp, nil
 }
+
 func (s *userService) Create(ctx context.Context, req models.CreateUserRequest) (*models.UserResponse, error) {
-	user := &models.User{
-		Name:  req.Name,
-		Email: req.Email,
+	password := strings.TrimSpace(req.Password)
+	if password == "" {
+		return nil, errors.New("password is required")
 	}
-	err := s.userRepo.Create(ctx, user)
+
+	passwordHash, err := utils.HashPassword(password)
+	if err != nil {
+		return nil, err
+	}
+
+	user := &models.User{
+		Name:         req.Name,
+		Email:        req.Email,
+		PasswordHash: passwordHash,
+	}
+	err = s.userRepo.Create(ctx, user)
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +67,7 @@ func (s *userService) Update(ctx context.Context, id string, req models.UpdateUs
 	resp := user.ToResponse()
 	return &resp, nil
 }
+
 func (s *userService) Delete(ctx context.Context, id string) error {
 	err := s.userRepo.Delete(ctx, id)
 	if err != nil {
