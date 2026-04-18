@@ -11,7 +11,12 @@ Each change is a pair of files:
 - `NNNNNN_description.up.sql` — apply
 - `NNNNNN_description.down.sql` — rollback (exists for manual use only. These are **NOT** run automatically by the API container)
 
-The API container runs **`migrate ... up` on startup**.
+The **`api` service** container runs **`migrate ... up` on startup** (see `backend/entrypoint.sh`), before the Go server starts.
+
+That only happens when the API container actually runs. For example:
+
+- **`docker compose up`** / **`docker compose up --build`** — starts `db` and `api`, so migrations run automatically when `api` starts (after `db` is healthy).
+- **`docker compose up db`** (database only) — does **not** start `api`, so **no** automatic migration run. Use [Apply migrations](#apply-migrations) manually if you need the schema without the API.
 
 ---
 

@@ -10,7 +10,8 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /out/api ./cmd/main.go
 FROM alpine:3.20
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates curl postgresql17-client
+# Alpine 3.20 provides postgresql15-client (no postgresql17-client); pg_isready works against PG 17.
+RUN apk add --no-cache ca-certificates curl postgresql15-client
 
 ARG MIGRATE_VERSION=v4.18.3
 RUN curl -fsSL "https://github.com/golang-migrate/migrate/releases/download/${MIGRATE_VERSION}/migrate.linux-amd64.tar.gz" \
