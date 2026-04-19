@@ -17,5 +17,22 @@ services:
       start_period: 10s
     restart: unless-stopped
 
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      APP_ENV: development
+      DATABASE_URL: postgres://web:webpass@db:5432/dev_dashdb?sslmode=disable
+      DATABASE_MAX_CONNS: "10"
+      DATABASE_MAX_CONN_IDLE_TIME: "20s"
+      DATABASE_MIN_CONNS: "2"
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
 volumes:
   postgres_data:
