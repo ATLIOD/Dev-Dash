@@ -53,17 +53,23 @@ func (h *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 	utils.WriteJSON(w, http.StatusOK, user)
 }
 func (h *UserHandler) Update(w http.ResponseWriter, r *http.Request) {
+	var req models.UpdateUserRequest
 	userID := chi.URLParam(r, "userID")
 	if userID == "" {
 		utils.WriteError(w, http.StatusBadRequest, "invalid user ID")
 		return
 	}
-	var req models.UpdateUserRequest
 	err := utils.DecodeJSON(r, &req)
 	if err != nil {
 		utils.WriteError(w, http.StatusBadRequest, "invalid JSON body")
 		return
 	}
+	user, err := h.Service.Update(r.Context(), userID, req)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, user)
 }
 func (h *UserHandler) Delete(w http.ResponseWriter, r *http.Request) {
 	userID := chi.URLParam(r, "userID")
