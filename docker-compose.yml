@@ -27,6 +27,7 @@ services:
       DATABASE_MAX_CONNS: "10"
       DATABASE_MAX_CONN_IDLE_TIME: "20s"
       DATABASE_MIN_CONNS: "2"
+      SEED: "true"
     ports:
       - "8080:8080"
     depends_on:

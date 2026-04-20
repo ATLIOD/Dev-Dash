@@ -2,6 +2,7 @@ package main
 
 import (
 	"DevDash/db"
+	"DevDash/db/seeds"
 	"DevDash/internal/api"
 	"DevDash/internal/api/handlers"
 	"DevDash/internal/config"
@@ -18,6 +19,12 @@ func main() {
 		log.Fatal(err)
 	}
 	defer database.Close()
+
+	if cfg.DB.Seed {
+		if err := seeds.SeedDatabase(database); err != nil {
+			log.Printf("Error seeding database: %v", err)
+		}
+	}
 
 	repos := repositories.New(database)
 	svcs := services.New(repos)
