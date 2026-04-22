@@ -5,11 +5,13 @@ import (
 )
 
 type Repository struct {
-	User UserRepository
+	User    UserRepository
+	Project ProjectRepository
 }
 
 func New(db *pgxpool.Pool) *Repository {
 	return &Repository{
-		User: &userRepository{db: db},
+		User:    &userRepository{db: db},
+		Project: &projectRepository{db: db},
 	}
 }
