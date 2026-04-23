@@ -32,6 +32,7 @@ func (r *userRepository) GetByID(ctx context.Context, id string) (*models.User, 
 	}
 	return &user, nil
 }
+
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
 	query := `
 		SELECT id, name, email, password_hash, created_at, updated_at
@@ -58,6 +59,7 @@ func (r *userRepository) Create(ctx context.Context, user *models.User) error {
 	}
 	return nil
 }
+
 func (r *userRepository) Update(ctx context.Context, user *models.User) error {
 	query := `
 		UPDATE users
@@ -70,6 +72,7 @@ func (r *userRepository) Update(ctx context.Context, user *models.User) error {
 	}
 	return nil
 }
+
 func (r *userRepository) Delete(ctx context.Context, id string) error {
 	query := `
 		DELETE FROM users
