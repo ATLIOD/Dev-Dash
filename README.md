@@ -31,7 +31,7 @@ Whether you're debugging a tricky bug, saving a useful code snippet, or tracking
 - Filter by language, search by keyword
 - Optionally link snippets to specific projects
 
-### Global Search (⌘K)
+### Global Search
 - Instant search across projects, notes, and snippets
 
 ---
