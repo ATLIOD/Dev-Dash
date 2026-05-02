@@ -18,7 +18,7 @@ type projectRepository struct {
 	db *pgxpool.Pool
 }
 
-func (r *projectRepository) GetByID(ctx context.Context, id string) (*models.Project, error) {
+func (r *projectRepository) GetByUUID(ctx context.Context, id string) (*models.Project, error) {
 	query := `
 		SELECT id, uuid, name, description, status, stack, repository_url, deployment_url, user_id, created_at, updated_at
 		FROM projects

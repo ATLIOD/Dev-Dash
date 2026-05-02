@@ -17,7 +17,7 @@ type projectService struct {
 	projectRepo repositories.ProjectRepository
 }
 
-func (s *projectService) GetByID(ctx context.Context, id string) (*models.ProjectResponse, error) {
+func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error) {
 	project, err := s.projectRepo.GetByID(ctx, id)
 	if err != nil {
 		return nil, err
