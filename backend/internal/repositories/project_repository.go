@@ -8,7 +8,7 @@ import (
 )
 
 type ProjectRepository interface {
-	GetByID(ctx context.Context, id string) (*models.Project, error)
+	GetByUUID(ctx context.Context, id string) (*models.Project, error)
 	Create(ctx context.Context, project *models.Project) error
 	Update(ctx context.Context, project *models.Project) error
 	Delete(ctx context.Context, id string) error

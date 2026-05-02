@@ -23,7 +23,7 @@ type userService struct {
 
 // TODO: change titles to uuid
 func (s *userService) GetByID(ctx context.Context, id string) (*models.UserResponse, error) {
-	user, err := s.userRepo.GetByID(ctx, id)
+	user, err := s.userRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (s *userService) Create(ctx context.Context, req models.CreateUserRequest) 
 }
 
 func (s *userService) Update(ctx context.Context, id string, req models.UpdateUserRequest) (*models.UserResponse, error) {
-	user, err := s.userRepo.GetByID(ctx, id)
+	user, err := s.userRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
