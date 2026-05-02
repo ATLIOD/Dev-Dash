@@ -21,6 +21,7 @@ type userService struct {
 	userRepo repositories.UserRepository
 }
 
+// TODO: change titles to uuid
 func (s *userService) GetByID(ctx context.Context, id string) (*models.UserResponse, error) {
 	user, err := s.userRepo.GetByID(ctx, id)
 	if err != nil {

@@ -19,7 +19,7 @@ type userRepository struct {
 	db *pgxpool.Pool
 }
 
-func (r *userRepository) GetByID(ctx context.Context, id string) (*models.User, error) {
+func (r *userRepository) GetByUUID(ctx context.Context, id string) (*models.User, error) {
 	query := `
 		SELECT id, uuid, name, email, password_hash, created_at, updated_at
 		FROM users
