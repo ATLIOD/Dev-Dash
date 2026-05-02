@@ -7,7 +7,7 @@ import (
 )
 
 type ProjectService interface {
-	GetByID(ctx context.Context, id string) (*models.ProjectResponse, error)
+	GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error)
 	Create(ctx context.Context, req models.CreateProjectRequest) (*models.ProjectResponse, error)
 	Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error)
 	Delete(ctx context.Context, id string) error
