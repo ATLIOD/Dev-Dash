@@ -18,7 +18,7 @@ type projectService struct {
 }
 
 func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error) {
-	project, err := s.projectRepo.GetByID(ctx, id)
+	project, err := s.projectRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (s *projectService) Create(ctx context.Context, req models.CreateProjectReq
 }
 
 func (s *projectService) Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error) {
-	project, err := s.projectRepo.GetByID(ctx, id)
+	project, err := s.projectRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
