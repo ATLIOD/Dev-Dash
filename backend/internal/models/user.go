@@ -3,7 +3,8 @@ package models
 import "time"
 
 type User struct {
-	ID           string    `json:"id"`
+	ID           int64     `json:"id"`
+	UUID         string    `json:"uuid"`
 	Name         string    `json:"name"`
 	Email        string    `json:"email"`
 	PasswordHash string    `json:"-"` // stores hashed password only
@@ -23,7 +24,7 @@ type UpdateUserRequest struct {
 }
 
 type UserResponse struct {
-	ID        string    `json:"id"`
+	ID        string    `json:"uuid"`
 	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
@@ -32,7 +33,7 @@ type UserResponse struct {
 
 func (u *User) ToResponse() UserResponse {
 	return UserResponse{
-		ID:        u.ID,
+		ID:        u.UUID,
 		Name:      u.Name,
 		Email:     u.Email,
 		CreatedAt: u.CreatedAt,
