@@ -47,7 +47,7 @@ func (h *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.Service.GetByID(r.Context(), userID)
+	user, err := h.Service.GetByUUID(r.Context(), userID)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err.Error())
 		return
