@@ -8,7 +8,9 @@ import (
 )
 
 type ProjectRepository interface {
+	GetByID(ctx context.Context, id int64) (*models.Project, error)
 	GetByUUID(ctx context.Context, id string) (*models.Project, error)
+	GetAllByUserID(ctx context.Context, userID int64) ([]models.Project, error)
 	Create(ctx context.Context, project *models.Project) error
 	Update(ctx context.Context, project *models.Project) error
 	Delete(ctx context.Context, id string) error
@@ -16,6 +18,20 @@ type ProjectRepository interface {
 
 type projectRepository struct {
 	db *pgxpool.Pool
+}
+
+func (r *projectRepository) GetByID(ctx context.Context, id int64) (*models.Project, error) {
+	query := `
+		SELECT id, uuid, name, description, status, stack, repository_url, deployment_url, user_id, created_at, updated_at
+		FROM projects
+		WHERE id = $1
+	`
+	var project models.Project
+	err := r.db.QueryRow(ctx, query, id).Scan(&project.ID, &project.UUID, &project.Name, &project.Description, &project.Status, &project.Stack, &project.RepositoryURL, &project.DeploymentURL, &project.UserID, &project.CreatedAt, &project.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &project, nil
 }
 
 func (r *projectRepository) GetByUUID(ctx context.Context, id string) (*models.Project, error) {
@@ -68,4 +84,29 @@ func (r *projectRepository) Delete(ctx context.Context, id string) error {
 		return err
 	}
 	return nil
+}
+
+func (r *projectRepository) GetAllByUserID(ctx context.Context, userID int64) ([]models.Project, error) {
+	query := `
+		SELECT id, uuid, name, description, status, stack, repository_url, deployment_url, user_id, created_at, updated_at
+		FROM projects
+		WHERE user_id = $1
+	`
+	rows, err := r.db.Query(ctx, query, userID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var projects []models.Project
+	for rows.Next() {
+		var p models.Project
+		err := rows.Scan(&p.ID, &p.UUID, &p.Name, &p.Description, &p.Status, &p.Stack, &p.RepositoryURL, &p.DeploymentURL, &p.UserID, &p.CreatedAt, &p.UpdatedAt)
+		if err != nil {
+			return nil, err
+		}
+		projects = append(projects, p)
+	}
+
+	return projects, nil
 }

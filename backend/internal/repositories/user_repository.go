@@ -8,6 +8,7 @@ import (
 )
 
 type UserRepository interface {
+	GetByID(ctx context.Context, id int64) (*models.User, error)
 	GetByUUID(ctx context.Context, id string) (*models.User, error)
 	GetByEmail(ctx context.Context, email string) (*models.User, error)
 	Create(ctx context.Context, user *models.User) error
@@ -17,6 +18,20 @@ type UserRepository interface {
 
 type userRepository struct {
 	db *pgxpool.Pool
+}
+
+func (r *userRepository) GetByID(ctx context.Context, id int64) (*models.User, error) {
+	query := `
+		SELECT id, uuid, name, email, password_hash, created_at, updated_at
+		FROM users
+		WHERE id = $1
+	`
+	var user models.User
+	err := r.db.QueryRow(ctx, query, id).Scan(&user.ID, &user.UUID, &user.Name, &user.Email, &user.PasswordHash, &user.CreatedAt, &user.UpdatedAt)
+	if err != nil {
+		return nil, err
+	}
+	return &user, nil
 }
 
 func (r *userRepository) GetByUUID(ctx context.Context, id string) (*models.User, error) {

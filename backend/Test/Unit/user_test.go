@@ -34,7 +34,7 @@ func TestUserService(t *testing.T) {
 
 	t.Run("Get User", func(t *testing.T) {
 		c := Test.NewChecker(t)
-		resp, err := svc.User.GetByID(context.Background(), "01")
+		resp, err := svc.User.GetByUUID(context.Background(), "01")
 		c.Check(assert.NoError(t, err))
 		c.Check(assert.NotNil(t, resp))
 		c.Check(assert.Equal(t, "User 1", resp.Name))
@@ -57,7 +57,7 @@ func TestUserService(t *testing.T) {
 		err := svc.User.Delete(context.Background(), "01")
 		c.Check(assert.NoError(t, err))
 
-		_, err = svc.User.GetByID(context.Background(), "01")
+		_, err = svc.User.GetByUUID(context.Background(), "01")
 		c.Check(assert.Error(t, err))
 		c.Check(assert.Contains(t, err.Error(), "no user found"))
 	})
