@@ -23,9 +23,7 @@ type DBConfig struct {
 
 func Load() *Config {
 	if os.Getenv("APP_ENV") != "production" {
-		if err := godotenv.Load(); err != nil {
-			log.Println("No .env file found, continuing...")
-		}
+		_ = godotenv.Load()
 	}
 	log.Println("environment: ", os.Getenv("APP_ENV"))
 
