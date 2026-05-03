@@ -35,7 +35,7 @@ func (r *userRepository) GetByUUID(ctx context.Context, id string) (*models.User
 
 func (r *userRepository) GetByEmail(ctx context.Context, email string) (*models.User, error) {
 	query := `
-		SELECT id, name, email, password_hash, created_at, updated_at
+		SELECT id, uuid, name, email, password_hash, created_at, updated_at
 		FROM users
 		WHERE email = $1
 	`

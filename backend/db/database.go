@@ -29,7 +29,7 @@ func OpenDB(dbConfig config.DBConfig) (*pgxpool.Pool, error) {
 	poolConfig.MaxConnIdleTime = dbConfig.MaxConnIdleTime
 	poolConfig.MinConns = int32(dbConfig.MinConns)
 
-	pool, err := pgxpool.New(context.Background(), dbConfig.Dsn)
+	pool, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
 		fmt.Printf("Unable to create connection pool: %v\n", err)
 		return nil, err
