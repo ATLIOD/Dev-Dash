@@ -55,18 +55,18 @@ Whether you're debugging a tricky bug, saving a useful code snippet, or tracking
 
 - **Dashboard** — Project cards with status, tech stack, and quick actions
 
-  <img width="1343" height="510" alt="image" src="https://github.com/user-attachments/assets/7b465cb6-ec51-4c7b-b6b1-e9db80f97977" />
-  
+<img width="1520" height="990" alt="MacBook Air - 1 (1)" src="https://github.com/user-attachments/assets/92f64e27-c74f-4fb0-a10f-8641b62eb78f" />
+
 - **Project Detail** — Tabbed view with dev notes and linked snippets
 
-  <img width="1346" height="540" alt="image" src="https://github.com/user-attachments/assets/e0a03eb1-43f0-4de1-bfc4-0ba418998cd0" />
-  
-  <img width="1341" height="516" alt="image" src="https://github.com/user-attachments/assets/cea2b64a-1f9c-46f7-94f7-9da15cca0d2a" />
+<img width="1520" height="990" alt="Project page snippets (1)" src="https://github.com/user-attachments/assets/3066672a-98f4-4a2d-a92d-0d8c2041bda0" />
+
+<img width="1520" height="990" alt="MacBook Air - 1 (2)" src="https://github.com/user-attachments/assets/f636f31a-9278-4ba5-ba4e-a1148593719d" />
 
 
 - **Snippets Vault** — Syntax-highlighted code library with search & filters
 
-  <img width="1346" height="505" alt="image" src="https://github.com/user-attachments/assets/932d8fc2-9f30-4900-86c4-2c7d713983ef" />
+<img width="1520" height="990" alt="Snippets Page" src="https://github.com/user-attachments/assets/4db9ffe1-86c1-412a-bd2b-df0eed601cd6" />
 
 - **Global Search** — palette searching across all content
 
@@ -88,9 +88,3 @@ Potential future enhancements:
 - [ ] Kanban board view for tasks
 - [ ] Time tracking per project
 - [ ] Support for 15+ languages (JavaScript, TypeScript, Python, Go, Rust, etc.)
-
----
-
-## Feedback
-
-Built with <3 for developers who love organized chaos
