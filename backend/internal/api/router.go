@@ -13,6 +13,7 @@ func NewRouter(h *handlers.Handler) chi.Router {
 	// r.Use(middleware.Cors)
 	// r.Use(middleware.Logger)
 
+	r.Get("/health", h.Health)
 	r.Route("/", func(r chi.Router) {
 		h.User.RegisterRoutes(r)
 	})
