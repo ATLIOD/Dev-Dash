@@ -18,13 +18,12 @@ type DBConfig struct {
 	MaxConns        int
 	MaxConnIdleTime time.Duration
 	MinConns        int
+	Seed            bool
 }
 
 func Load() *Config {
 	if os.Getenv("APP_ENV") != "production" {
-		if err := godotenv.Load(); err != nil {
-			log.Println("No .env fie found, continuin..")
-		}
+		_ = godotenv.Load()
 	}
 	log.Println("environment: ", os.Getenv("APP_ENV"))
 
@@ -36,7 +35,7 @@ func Load() *Config {
 	}
 	MaxConnIdleTime, err := time.ParseDuration(os.Getenv("DATABASE_MAX_CONN_IDLE_TIME"))
 	if err != nil {
-		MaxConnIdleTime = 20
+		MaxConnIdleTime = 20 * time.Second
 		log.Println("DATABASE_MAX_CONN_IDLE_TIME:", err)
 	}
 	MinConns, err := strconv.Atoi(os.Getenv("DATABASE_MIN_CONNS"))
@@ -45,12 +44,20 @@ func Load() *Config {
 		log.Println("DATABASE_MIN_CONNS:", err)
 	}
 
+	seedStr := os.Getenv("SEED")
+	Seed, err := strconv.ParseBool(seedStr)
+	if err != nil {
+		Seed = false
+		log.Println("SEED:", err)
+	}
+
 	return &Config{
 		DB: DBConfig{
 			Dsn:             pgDSN,
 			MaxConns:        MaxConns,
 			MaxConnIdleTime: MaxConnIdleTime,
 			MinConns:        MinConns,
+			Seed:            Seed,
 		},
 	}
 }
