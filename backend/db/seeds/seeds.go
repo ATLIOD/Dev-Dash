@@ -11,8 +11,21 @@ import (
 
 // SeedDatabase is the entry point for seeding dummy data
 func SeedDatabase(pool *pgxpool.Pool) error {
-	log.Println("Seeding database...")
 	ctx := context.Background()
+
+	// Check if database is already seeded
+	var count int
+	err := pool.QueryRow(ctx, "SELECT COUNT(*) FROM users").Scan(&count)
+	if err != nil {
+		return fmt.Errorf("failed to check if database is seeded: %w", err)
+	}
+
+	if count > 0 {
+		log.Println("Database already contains data. Skipping seeding.")
+		return nil
+	}
+
+	log.Println("Seeding database...")
 
 	if err := seedUsers(ctx, pool); err != nil {
 		return fmt.Errorf("failed to seed users: %w", err)
@@ -101,6 +114,15 @@ func seedProjects(ctx context.Context, pool *pgxpool.Pool) error {
 			Stack:         "React, TypeScript, Tailwind",
 			RepositoryURL: "https://github.com/example/dev-dash-ui",
 			DeploymentURL: "https://dev-dash.com",
+			UserID:        userIDs[0],
+		},
+		{
+			Name:          "Dev-Dash",
+			Description:   "developer dashboard",
+			Status:        "active",
+			Stack:         "Go, PostgreSQL, pgx, react",
+			RepositoryURL: "https://github.com/example/dev-dash",
+			DeploymentURL: "https://api.dev-dash.com",
 			UserID:        userIDs[0],
 		},
 	}

@@ -65,7 +65,7 @@ func (r *projectRepository) Update(ctx context.Context, project *models.Project)
 	query := `
 		UPDATE projects
 		SET name = $1, description = $2, status = $3, stack = $4, repository_url = $5, deployment_url = $6, updated_at = NOW()
-		WHERE uuid = $8
+		WHERE uuid = $7
 		`
 	_, err := r.db.Exec(ctx, query, project.Name, project.Description, project.Status, project.Stack, project.RepositoryURL, project.DeploymentURL, project.UUID)
 	if err != nil {

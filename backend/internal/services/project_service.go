@@ -8,7 +8,7 @@ import (
 
 type ProjectService interface {
 	GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error)
-	GetAllByUserID(ctx context.Context, userID int64) ([]models.ProjectResponse, error)
+	GetAllByUserUUID(ctx context.Context, userID string) ([]*models.ProjectResponse, error)
 	Create(ctx context.Context, req models.CreateProjectRequest) (*models.ProjectResponse, error)
 	Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error)
 	Delete(ctx context.Context, id string) error
@@ -27,7 +27,7 @@ func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.Proj
 	return new(project.ToResponse()), nil
 }
 
-func (s *projectService) GetAllByUserUUID(ctx context.Context, userUUID string) ([]models.ProjectResponse, error) {
+func (s *projectService) GetAllByUserUUID(ctx context.Context, userUUID string) ([]*models.ProjectResponse, error) {
 	user, err := s.userRepo.GetByUUID(ctx, userUUID)
 	if err != nil {
 		return nil, err
@@ -36,9 +36,9 @@ func (s *projectService) GetAllByUserUUID(ctx context.Context, userUUID string) 
 	if err != nil {
 		return nil, err
 	}
-	var resps []models.ProjectResponse
+	var resps []*models.ProjectResponse
 	for _, p := range projects {
-		resps = append(resps, p.ToResponse())
+		resps = append(resps, new(p.ToResponse()))
 	}
 	return resps, nil
 }

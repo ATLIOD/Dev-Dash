@@ -16,6 +16,7 @@ func NewRouter(h *handlers.Handler) chi.Router {
 	r.Get("/health", h.Health)
 	r.Route("/", func(r chi.Router) {
 		h.User.RegisterRoutes(r)
+		h.Project.RegisterRoutes(r)
 	})
 
 	return r

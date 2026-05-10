@@ -7,7 +7,8 @@ import (
 )
 
 type Handler struct {
-	User *UserHandler
+	User    *UserHandler
+	Project *ProjectHandler
 }
 
 func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
@@ -16,6 +17,7 @@ func (h *Handler) Health(w http.ResponseWriter, r *http.Request) {
 
 func New(svc *services.Service) *Handler {
 	return &Handler{
-		User: &UserHandler{Service: svc.User},
+		User:    &UserHandler{Service: svc.User},
+		Project: &ProjectHandler{Service: svc.Project},
 	}
 }
