@@ -1,0 +1,88 @@
+package handlers
+
+import (
+	"DevDash/internal/models"
+	"DevDash/internal/services"
+	"DevDash/pkg/utils"
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+)
+
+type ProjectHandler struct {
+	Service services.ProjectService
+}
+
+// TODO: need to figure out how to actually nest routers a stuff i think
+
+func (h *ProjectHandler) RegisterRoutes(r chi.Router) {
+	r.Route("/project", func(r chi.Router) {
+		r.Post("/", h.Create)
+		r.Route("/{projectID}", func(r chi.Router) {
+			r.Get("/", h.Get)
+			r.Put("/", h.Update)
+			r.Delete("/", h.Delete)
+		})
+	})
+}
+
+func (h *ProjectHandler) Create(w http.ResponseWriter, r *http.Request) {
+	var req models.CreateProjectRequest
+	err := utils.DecodeJSON(r, &req)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, "invalid JSON body")
+		return
+	}
+	project, err := h.Service.Create(r.Context(), req)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.WriteJSON(w, http.StatusCreated, project)
+}
+func (h *ProjectHandler) Get(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		utils.WriteError(w, http.StatusBadRequest, "invalid project ID")
+		return
+	}
+
+	project, err := h.Service.GetByUUID(r.Context(), projectID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, project)
+}
+func (h *ProjectHandler) Update(w http.ResponseWriter, r *http.Request) {
+	var req models.UpdateProjectRequest
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		utils.WriteError(w, http.StatusBadRequest, "invalid project ID")
+		return
+	}
+	err := utils.DecodeJSON(r, &req)
+	if err != nil {
+		utils.WriteError(w, http.StatusBadRequest, "invalid JSON body")
+		return
+	}
+	project, err := h.Service.Update(r.Context(), projectID, req)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, project)
+}
+func (h *ProjectHandler) Delete(w http.ResponseWriter, r *http.Request) {
+	projectID := chi.URLParam(r, "projectID")
+	if projectID == "" {
+		utils.WriteError(w, http.StatusBadRequest, "invalid project ID")
+		return
+	}
+	err := h.Service.Delete(r.Context(), projectID)
+	if err != nil {
+		utils.WriteError(w, http.StatusInternalServerError, err.Error())
+		return
+	}
+	utils.WriteJSON(w, http.StatusOK, nil)
+}

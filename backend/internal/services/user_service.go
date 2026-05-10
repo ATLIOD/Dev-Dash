@@ -21,14 +21,12 @@ type userService struct {
 	userRepo repositories.UserRepository
 }
 
-// TODO: change titles to uuid
 func (s *userService) GetByUUID(ctx context.Context, id string) (*models.UserResponse, error) {
 	user, err := s.userRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
-	resp := user.ToResponse()
-	return &resp, nil
+	return new(user.ToResponse()), nil
 }
 
 func (s *userService) GetByEmail(ctx context.Context, email string) (*models.UserResponse, error) {
@@ -36,8 +34,7 @@ func (s *userService) GetByEmail(ctx context.Context, email string) (*models.Use
 	if err != nil {
 		return nil, err
 	}
-	resp := user.ToResponse()
-	return &resp, nil
+	return new(user.ToResponse()), nil
 }
 
 func (s *userService) Create(ctx context.Context, req models.CreateUserRequest) (*models.UserResponse, error) {
@@ -60,8 +57,7 @@ func (s *userService) Create(ctx context.Context, req models.CreateUserRequest) 
 	if err != nil {
 		return nil, err
 	}
-	resp := user.ToResponse()
-	return &resp, nil
+	return new(user.ToResponse()), nil
 }
 
 func (s *userService) Update(ctx context.Context, id string, req models.UpdateUserRequest) (*models.UserResponse, error) {
@@ -75,8 +71,7 @@ func (s *userService) Update(ctx context.Context, id string, req models.UpdateUs
 	if err != nil {
 		return nil, err
 	}
-	resp := user.ToResponse()
-	return &resp, nil
+	return new(user.ToResponse()), nil
 }
 
 func (s *userService) Delete(ctx context.Context, id string) error {

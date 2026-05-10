@@ -16,6 +16,7 @@ type ProjectService interface {
 
 type projectService struct {
 	projectRepo repositories.ProjectRepository
+	userRepo    repositories.UserRepository
 }
 
 func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error) {
@@ -23,12 +24,15 @@ func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.Proj
 	if err != nil {
 		return nil, err
 	}
-	resp := project.ToResponse()
-	return &resp, nil
+	return new(project.ToResponse()), nil
 }
 
-func (s *projectService) GetAllByUserID(ctx context.Context, userID int64) ([]models.ProjectResponse, error) {
-	projects, err := s.projectRepo.GetAllByUserID(ctx, userID)
+func (s *projectService) GetAllByUserUUID(ctx context.Context, userUUID string) ([]models.ProjectResponse, error) {
+	user, err := s.userRepo.GetByUUID(ctx, userUUID)
+	if err != nil {
+		return nil, err
+	}
+	projects, err := s.projectRepo.GetAllByUserID(ctx, user.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -53,8 +57,7 @@ func (s *projectService) Create(ctx context.Context, req models.CreateProjectReq
 	if err != nil {
 		return nil, err
 	}
-	resp := project.ToResponse()
-	return &resp, nil
+	return new(project.ToResponse()), nil
 }
 
 func (s *projectService) Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error) {
@@ -73,8 +76,7 @@ func (s *projectService) Update(ctx context.Context, id string, req models.Updat
 	if err != nil {
 		return nil, err
 	}
-	resp := project.ToResponse()
-	return &resp, nil
+	return new(project.ToResponse()), nil
 }
 
 func (s *projectService) Delete(ctx context.Context, id string) error {
