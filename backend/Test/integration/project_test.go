@@ -17,7 +17,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestUserAPI(t *testing.T) {
+func TestProjectAPI(t *testing.T) {
 	baseURL := os.Getenv("API_BASE_URL")
 	if baseURL == "" {
 		baseURL = "http://localhost:8080"
@@ -26,14 +26,10 @@ func TestUserAPI(t *testing.T) {
 	repo, cleanup := utils.Setup()
 	defer cleanup()
 
-	t.Run("Create User", func(t *testing.T) {
+	t.Run("Create Project", func(t *testing.T) {
 		utils.UserCleanup(repo, "")
 		c := Test.NewChecker(t)
-		payload := map[string]string{
-			"name":     "test-user-create",
-			"email":    "test-user-create@example.com",
-			"password": "password123",
-		}
+		payload := models.CreateProjectRequest{}
 		body, err := json.Marshal(payload)
 		c.Check(assert.NoError(t, err))
 
@@ -47,7 +43,7 @@ func TestUserAPI(t *testing.T) {
 		}
 		c.Check(assert.Equal(t, http.StatusCreated, resp.StatusCode, "unexpected response code"))
 
-		var user models.UserResponse
+		var user models.ProjectResponse
 		err = json.NewDecoder(resp.Body).Decode(&user)
 		c.Check(assert.NoError(t, err))
 
@@ -62,7 +58,24 @@ func TestUserAPI(t *testing.T) {
 		utils.UserCleanup(repo, "")
 	})
 
-	t.Run("Get User", func(t *testing.T) {
+	t.Run("Get Project", func(t *testing.T) {
+		uuid := utils.UserSetup(repo, "Get")
+		c := Test.NewChecker(t)
+		resp, err := http.Get(baseURL + "/user/" + uuid)
+		c.Check(assert.NoError(t, err))
+		defer resp.Body.Close()
+
+		c.Check(assert.Equal(t, http.StatusOK, resp.StatusCode))
+
+		var user models.ProjectResponse
+		err = json.NewDecoder(resp.Body).Decode(&user)
+		c.Check(assert.NoError(t, err))
+		c.Check(assert.Equal(t, uuid, user.ID))
+
+		utils.UserCleanup(repo, user.ID)
+	})
+
+	t.Run("Get All Projects For User", func(t *testing.T) {
 		uuid := utils.UserSetup(repo, "Get")
 		c := Test.NewChecker(t)
 		resp, err := http.Get(baseURL + "/user/" + uuid)
@@ -79,7 +92,7 @@ func TestUserAPI(t *testing.T) {
 		utils.UserCleanup(repo, user.ID)
 	})
 
-	t.Run("Update User", func(t *testing.T) {
+	t.Run("Update Project", func(t *testing.T) {
 		uuid := utils.UserSetup(repo, "Update")
 		c := Test.NewChecker(t)
 
@@ -101,7 +114,7 @@ func TestUserAPI(t *testing.T) {
 
 		c.Check(assert.Equal(t, http.StatusOK, resp.StatusCode))
 
-		var user models.UserResponse
+		var user models.ProjectResponse
 		err = json.NewDecoder(resp.Body).Decode(&user)
 		c.Check(assert.NoError(t, err))
 		c.Check(assert.Equal(t, payload["name"], user.Name))
@@ -110,7 +123,7 @@ func TestUserAPI(t *testing.T) {
 		utils.UserCleanup(repo, uuid)
 	})
 
-	t.Run("Delete User", func(t *testing.T) {
+	t.Run("Delete Project", func(t *testing.T) {
 		uuid := utils.UserSetup(repo, "Delete")
 		c := Test.NewChecker(t)
 		req, err := http.NewRequest(http.MethodDelete, baseURL+"/user/"+uuid, nil)
