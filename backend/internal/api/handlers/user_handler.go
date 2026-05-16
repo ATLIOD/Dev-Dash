@@ -13,8 +13,6 @@ type UserHandler struct {
 	Service services.UserService
 }
 
-// TODO: need to figure out how to actually nest routers a stuff i think
-
 func (h *UserHandler) RegisterRoutes(r chi.Router) {
 	r.Route("/user", func(r chi.Router) {
 		r.Post("/", h.Create)

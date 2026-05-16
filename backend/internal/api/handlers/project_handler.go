@@ -13,8 +13,6 @@ type ProjectHandler struct {
 	Service services.ProjectService
 }
 
-// TODO: need to figure out how to actually nest routers a stuff i think
-
 func (h *ProjectHandler) RegisterRoutes(r chi.Router) {
 	r.Route("/project", func(r chi.Router) {
 		r.Post("/", h.Create)
