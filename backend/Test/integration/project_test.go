@@ -7,11 +7,12 @@ import (
 	"DevDash/Test/integration/utils"
 	"DevDash/internal/models"
 	"bytes"
+	"context"
 	"encoding/json"
-	"io"
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -22,88 +23,99 @@ func TestProjectAPI(t *testing.T) {
 	if baseURL == "" {
 		baseURL = "http://localhost:8080"
 	}
-	var userID string
 	repo, cleanup := utils.Setup()
 	defer cleanup()
 
 	t.Run("Create Project", func(t *testing.T) {
-		utils.UserCleanup(repo, "")
+		user := utils.UserSetup(repo, "CreateProject")
 		c := Test.NewChecker(t)
-		payload := models.CreateProjectRequest{}
+		payload := models.CreateProjectRequest{
+			Name:          "Test Creation Project",
+			Description:   "Test Creation Project Description",
+			Status:        "In progress",
+			Stack:         "React, Go, Docker",
+			RepositoryURL: "example.com",
+			DeploymentURL: "example.com",
+			UserID:        user.ID,
+		}
 		body, err := json.Marshal(payload)
 		c.Check(assert.NoError(t, err))
 
-		resp, err := http.Post(baseURL+"/user/", "application/json", bytes.NewBuffer(body))
+		resp, err := http.Post(baseURL+"/project/", "application/json", bytes.NewBuffer(body))
 		c.Check(assert.NoError(t, err))
 		defer resp.Body.Close()
 
-		if resp.StatusCode != http.StatusCreated {
-			respBody, _ := io.ReadAll(resp.Body)
-			t.Fatalf("Expected status 201, got %d. Body: %s", resp.StatusCode, string(respBody))
-		}
 		c.Check(assert.Equal(t, http.StatusCreated, resp.StatusCode, "unexpected response code"))
 
-		var user models.ProjectResponse
-		err = json.NewDecoder(resp.Body).Decode(&user)
+		var project models.ProjectResponse
+		err = json.NewDecoder(resp.Body).Decode(&project)
 		c.Check(assert.NoError(t, err))
 
-		userID = user.ID
-		c.Check(assert.NotEmpty(t, userID, "User ID should not be empty in response"))
-		c.Check(assert.Equal(t, payload["name"], user.Name, "name does not match expected value"))
-		c.Check(assert.Equal(t, payload["email"], user.Email, "name does not match expected value"))
+		c.Check(assert.NotEmpty(t, project.ID, "Project ID should not be empty in response"))
+		c.Check(assert.Equal(t, payload.Name, project.Name, "name does not match expected value"))
+		c.Check(assert.Equal(t, payload.UserID, project.UserID, "user id does not match expected value"))
 
 		if c.Failed() {
-			log.Print("User creation test has failed")
+			log.Print("Project creation test has failed")
 		}
-		utils.UserCleanup(repo, "")
+		utils.ProjectCleanup(repo, user)
 	})
 
 	t.Run("Get Project", func(t *testing.T) {
-		uuid := utils.UserSetup(repo, "Get")
+		user, project := utils.ProjectSetup(repo, "Get")
 		c := Test.NewChecker(t)
-		resp, err := http.Get(baseURL + "/user/" + uuid)
+		resp, err := http.Get(baseURL + "/project/" + project.UUID)
 		c.Check(assert.NoError(t, err))
 		defer resp.Body.Close()
 
 		c.Check(assert.Equal(t, http.StatusOK, resp.StatusCode))
 
-		var user models.ProjectResponse
-		err = json.NewDecoder(resp.Body).Decode(&user)
+		var retrievedProject models.ProjectResponse
+		err = json.NewDecoder(resp.Body).Decode(&retrievedProject)
 		c.Check(assert.NoError(t, err))
-		c.Check(assert.Equal(t, uuid, user.ID))
+		c.Check(assert.Equal(t, retrievedProject.ID, project.UUID))
+		c.Check(assert.Equal(t, retrievedProject.UserID, user.ID))
 
-		utils.UserCleanup(repo, user.ID)
+		utils.ProjectCleanup(repo, user)
 	})
 
 	t.Run("Get All Projects For User", func(t *testing.T) {
-		uuid := utils.UserSetup(repo, "Get")
+		user := utils.UserSetup(repo, "Get")
+		for i := range 5 {
+			_ = repo.Project.Create(context.Background(), &models.Project{Name: "Temp Project" + strconv.Itoa(i), UserID: user.ID})
+		}
+
 		c := Test.NewChecker(t)
-		resp, err := http.Get(baseURL + "/user/" + uuid)
+		resp, err := http.Get(baseURL + "/projects/" + user.UUID)
 		c.Check(assert.NoError(t, err))
 		defer resp.Body.Close()
 
 		c.Check(assert.Equal(t, http.StatusOK, resp.StatusCode))
 
-		var user models.UserResponse
-		err = json.NewDecoder(resp.Body).Decode(&user)
+		var projects []models.ProjectResponse
+		err = json.NewDecoder(resp.Body).Decode(&projects)
 		c.Check(assert.NoError(t, err))
-		c.Check(assert.Equal(t, uuid, user.ID))
+		c.Check(assert.True(t, len(projects) == 5))
 
-		utils.UserCleanup(repo, user.ID)
+		utils.ProjectCleanup(repo, user)
 	})
 
 	t.Run("Update Project", func(t *testing.T) {
-		uuid := utils.UserSetup(repo, "Update")
+		user, project := utils.ProjectSetup(repo, "Update")
 		c := Test.NewChecker(t)
 
-		payload := map[string]string{
-			"name":  "Updated Integration User",
-			"email": "test-api-updated@example.com",
+		payload := models.UpdateProjectRequest{
+			Name:          "Updated Integration Project",
+			Description:   "Test Creation Project Description",
+			Status:        "In progress",
+			Stack:         "React, Go, Docker",
+			RepositoryURL: "example.com",
+			DeploymentURL: "example.com",
 		}
 		body, err := json.Marshal(payload)
 		c.Check(assert.NoError(t, err))
 
-		req, err := http.NewRequest(http.MethodPut, baseURL+"/user/"+uuid, bytes.NewBuffer(body))
+		req, err := http.NewRequest(http.MethodPut, baseURL+"/project/"+project.UUID, bytes.NewBuffer(body))
 		c.Check(assert.NoError(t, err))
 		req.Header.Set("Content-Type", "application/json")
 
@@ -114,19 +126,19 @@ func TestProjectAPI(t *testing.T) {
 
 		c.Check(assert.Equal(t, http.StatusOK, resp.StatusCode))
 
-		var user models.ProjectResponse
-		err = json.NewDecoder(resp.Body).Decode(&user)
+		var updatedProject models.ProjectResponse
+		err = json.NewDecoder(resp.Body).Decode(&updatedProject)
 		c.Check(assert.NoError(t, err))
-		c.Check(assert.Equal(t, payload["name"], user.Name))
-		c.Check(assert.Equal(t, payload["email"], user.Email))
+		c.Check(assert.Equal(t, payload.Name, updatedProject.Name))
+		c.Check(assert.Equal(t, payload.Description, updatedProject.Description))
 
-		utils.UserCleanup(repo, uuid)
+		utils.ProjectCleanup(repo, user)
 	})
 
 	t.Run("Delete Project", func(t *testing.T) {
-		uuid := utils.UserSetup(repo, "Delete")
+		user, project := utils.ProjectSetup(repo, "Delete")
 		c := Test.NewChecker(t)
-		req, err := http.NewRequest(http.MethodDelete, baseURL+"/user/"+uuid, nil)
+		req, err := http.NewRequest(http.MethodDelete, baseURL+"/project/"+project.UUID, nil)
 		c.Check(assert.NoError(t, err))
 
 		client := &http.Client{}
@@ -137,12 +149,12 @@ func TestProjectAPI(t *testing.T) {
 		c.Check(assert.Equal(t, http.StatusOK, resp.StatusCode))
 
 		// Verify deletion
-		getResp, err := http.Get(baseURL + "/user/" + uuid)
+		getResp, err := http.Get(baseURL + "/project/" + project.UUID)
 		c.Check(assert.NoError(t, err))
 		c.Check(assert.Equal(t, http.StatusInternalServerError, getResp.StatusCode))
 
 		if c.Failed() {
-			utils.UserCleanup(repo, uuid)
+			utils.ProjectCleanup(repo, user)
 		}
 	})
 }

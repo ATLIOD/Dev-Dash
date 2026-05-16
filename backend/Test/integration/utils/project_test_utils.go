@@ -7,11 +7,11 @@ import (
 	"log"
 )
 
-func ProjectSetup(repo *repositories.Repository, test string) string {
-	u, _ := repo.User.GetByUUID(context.Background(), UserSetup(repo, "project"))
+func ProjectSetup(repo *repositories.Repository, test string) (*models.User, *models.Project) {
+	UserCleanup(repo, nil)
+	u, _ := repo.User.GetByUUID(context.Background(), UserSetup(repo, "").UUID)
 	project := &models.Project{
-		ID:            1,
-		UUID:          "01",
+		UUID:          "2aea5bf5-a98c-4706-af44-9a24852ef1be",
 		Name:          "test-project-" + test,
 		Description:   "project description",
 		Status:        "",
@@ -28,18 +28,15 @@ func ProjectSetup(repo *repositories.Repository, test string) string {
 		log.Fatal(err)
 	}
 
-	v, _ := repo.Project.GetByEmail(context.Background(), project.Email)
-	return v.UUID
+	return u, project
 }
 
-func ProjectCleanup(repo *repositories.Repository, uuid string) {
-	if uuid == "" {
-		project, _ := repo.Project.GetByEmail(context.Background(), "test-project-create@example.com")
-		if project != nil {
+func ProjectCleanup(repo *repositories.Repository, user *models.User) {
+	projects, _ := repo.Project.GetAllByUserID(context.Background(), user.ID)
+	if projects != nil {
+		for _, project := range projects {
 			_ = repo.Project.Delete(context.Background(), project.UUID)
 		}
-		return
 	}
-	_ = repo.Project.Delete(context.Background(), uuid)
-
+	UserCleanup(repo, user)
 }
