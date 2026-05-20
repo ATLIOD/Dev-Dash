@@ -30,7 +30,7 @@ func main() {
 	svcs := services.New(repos)
 	h := handlers.New(svcs)
 
-	router := api.NewRouter(h)
+	router := api.NewRouter(h, cfg.CorsConfig)
 
 	log.Printf("Server starting on :%s", "8080")
 	if err := http.ListenAndServe(":"+"8080", router); err != nil {
