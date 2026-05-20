@@ -1,16 +1,20 @@
 package config
 
 import (
+	"DevDash/internal/api/middleware"
 	"log"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
-	DB DBConfig
+	DB         DBConfig
+	CorsConfig *cors.Cors
 }
 
 type DBConfig struct {
@@ -51,6 +55,13 @@ func Load() *Config {
 		log.Println("SEED:", err)
 	}
 
+	allowedOrigins := strings.Split(os.Getenv("ALLOWED_ORIGINS"), ",")
+	allowedMethods := strings.Split(os.Getenv("ALLOWED_METHODS"), ",")
+	allowedHeaders := strings.Split(os.Getenv("ALLOWED_HEADERS"), ",")
+	exposedHeaders := strings.Split(os.Getenv("EXPOSED_HEADERS"), ",")
+
+	corsConfig := middleware.GetCorsConfig(allowedOrigins, allowedMethods, allowedHeaders, exposedHeaders)
+
 	return &Config{
 		DB: DBConfig{
 			Dsn:             pgDSN,
@@ -59,5 +70,6 @@ func Load() *Config {
 			MinConns:        MinConns,
 			Seed:            Seed,
 		},
+		CorsConfig: corsConfig,
 	}
 }
