@@ -1,6 +1,9 @@
-package api
+//go:build integration
+
+package integration
 
 import (
+	"DevDash/internal/api"
 	"DevDash/internal/api/handlers"
 	"DevDash/internal/api/middleware"
 	"net/http"
@@ -19,7 +22,7 @@ func TestCORS(t *testing.T) {
 		User:    &handlers.UserHandler{},
 		Project: &handlers.ProjectHandler{},
 	}
-	router := NewRouter(h, corsConfig)
+	router := api.NewRouter(h, corsConfig)
 
 	t.Run("Allowed Origin", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/health", nil)
