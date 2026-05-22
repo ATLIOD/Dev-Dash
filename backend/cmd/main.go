@@ -28,9 +28,9 @@ func main() {
 
 	repos := repositories.New(database)
 	svcs := services.New(repos)
-	h := handlers.New(svcs)
+	h := handlers.New(svcs, cfg.TokenAuth)
 
-	router := api.NewRouter(h, cfg.CorsConfig)
+	router := api.NewRouter(h, cfg.CorsConfig, cfg.TokenAuth)
 
 	log.Printf("Server starting on :%s", "8080")
 	if err := http.ListenAndServe(":"+"8080", router); err != nil {
