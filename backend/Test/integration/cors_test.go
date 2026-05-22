@@ -9,9 +9,12 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/go-chi/jwtauth/v5"
 )
 
 func TestCORS(t *testing.T) {
+	tokenAuth := jwtauth.New("HS256", []byte("secret"), nil)
 	allowedOrigins := []string{"http://localhost:3000"}
 	allowedMethods := []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"}
 	allowedHeaders := []string{"Accept", "Authorization", "Content-Type"}
@@ -22,7 +25,7 @@ func TestCORS(t *testing.T) {
 		User:    &handlers.UserHandler{},
 		Project: &handlers.ProjectHandler{},
 	}
-	router := api.NewRouter(h, corsConfig)
+	router := NewRouter(h, corsConfig, tokenAuth)
 
 	t.Run("Allowed Origin", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/health", nil)
