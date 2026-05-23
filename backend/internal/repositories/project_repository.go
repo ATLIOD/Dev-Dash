@@ -13,7 +13,7 @@ type ProjectRepository interface {
 	GetAllByUserID(ctx context.Context, userID int64) ([]models.Project, error)
 	Create(ctx context.Context, project *models.Project) error
 	Update(ctx context.Context, project *models.Project) error
-	Delete(ctx context.Context, id string) error
+	Delete(ctx context.Context, uuid string) error
 }
 
 type projectRepository struct {
@@ -34,14 +34,14 @@ func (r *projectRepository) GetByID(ctx context.Context, id int64) (*models.Proj
 	return &project, nil
 }
 
-func (r *projectRepository) GetByUUID(ctx context.Context, id string) (*models.Project, error) {
+func (r *projectRepository) GetByUUID(ctx context.Context, uuid string) (*models.Project, error) {
 	query := `
 		SELECT id, uuid, name, description, status, stack, repository_url, deployment_url, user_id, created_at, updated_at
 		FROM projects
 		WHERE uuid = $1
 	`
 	var project models.Project
-	err := r.db.QueryRow(ctx, query, id).Scan(&project.ID, &project.UUID, &project.Name, &project.Description, &project.Status, &project.Stack, &project.RepositoryURL, &project.DeploymentURL, &project.UserID, &project.CreatedAt, &project.UpdatedAt)
+	err := r.db.QueryRow(ctx, query, uuid).Scan(&project.ID, &project.UUID, &project.Name, &project.Description, &project.Status, &project.Stack, &project.RepositoryURL, &project.DeploymentURL, &project.UserID, &project.CreatedAt, &project.UpdatedAt)
 	if err != nil {
 		return nil, err
 	}
@@ -74,12 +74,12 @@ func (r *projectRepository) Update(ctx context.Context, project *models.Project)
 	return nil
 }
 
-func (r *projectRepository) Delete(ctx context.Context, id string) error {
+func (r *projectRepository) Delete(ctx context.Context, uuid string) error {
 	query := `
 		DELETE FROM projects
 		WHERE uuid = $1
 	`
-	_, err := r.db.Exec(ctx, query, id)
+	_, err := r.db.Exec(ctx, query, uuid)
 	if err != nil {
 		return err
 	}
