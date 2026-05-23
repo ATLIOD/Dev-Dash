@@ -50,7 +50,7 @@ type ProjectResponse struct {
 
 func (p *Project) ToResponse() ProjectResponse {
 	return ProjectResponse{
-		ID:            p.UUID,
+		UUID:            p.UUID,
 		Name:          p.Name,
 		Description:   p.Description,
 		Status:        p.Status,
