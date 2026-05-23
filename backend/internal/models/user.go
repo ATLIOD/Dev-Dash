@@ -33,7 +33,7 @@ type UserResponse struct {
 
 func (u *User) ToResponse() UserResponse {
 	return UserResponse{
-		ID:        u.UUID,
+		UUID:        u.UUID,
 		Name:      u.Name,
 		Email:     u.Email,
 		CreatedAt: u.CreatedAt,
