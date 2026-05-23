@@ -36,7 +36,7 @@ type UpdateProjectRequest struct {
 }
 
 type ProjectResponse struct {
-	ID            string    `json:"uuid"`
+	UUID            string    `json:"uuid"`
 	Name          string    `json:"name"`
 	Description   string    `json:"description"`
 	Status        string    `json:"status"`
