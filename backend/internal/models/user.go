@@ -24,7 +24,7 @@ type UpdateUserRequest struct {
 }
 
 type UserResponse struct {
-	ID        string    `json:"uuid"`
+	UUID        string    `json:"uuid"`
 	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
