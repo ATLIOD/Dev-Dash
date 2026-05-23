@@ -9,7 +9,7 @@ import (
 
 type ProjectRepository interface {
 	GetByID(ctx context.Context, id int64) (*models.Project, error)
-	GetByUUID(ctx context.Context, id string) (*models.Project, error)
+	GetByUUID(ctx context.Context, uuid string) (*models.Project, error)
 	GetAllByUserID(ctx context.Context, userID int64) ([]models.Project, error)
 	Create(ctx context.Context, project *models.Project) error
 	Update(ctx context.Context, project *models.Project) error
