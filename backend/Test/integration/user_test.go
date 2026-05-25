@@ -18,7 +18,7 @@ import (
 )
 
 type UserResponse struct {
-	UUID        string    `json:"uuid"`
+	UUID      string    `json:"uuid"`
 	Name      string    `json:"name"`
 	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"created_at"`
@@ -59,7 +59,7 @@ func TestUserAPI(t *testing.T) {
 		err = json.NewDecoder(resp.Body).Decode(&user)
 		c.Check(assert.NoError(t, err))
 
-		userID = user.ID
+		userID = user.UUID
 		c.Check(assert.NotEmpty(t, userID, "User ID should not be empty in response"))
 		c.Check(assert.Equal(t, payload["name"], user.Name, "name does not match expected value"))
 		c.Check(assert.Equal(t, payload["email"], user.Email, "name does not match expected value"))
@@ -82,9 +82,9 @@ func TestUserAPI(t *testing.T) {
 		var user UserResponse
 		err = json.NewDecoder(resp.Body).Decode(&user)
 		c.Check(assert.NoError(t, err))
-		c.Check(assert.Equal(t, uuid, user.ID))
+		c.Check(assert.Equal(t, uuid, user.UUID))
 
-		utils.UserCleanup(repo, user.ID)
+		utils.UserCleanup(repo, user.UUID)
 	})
 
 	t.Run("Update User", func(t *testing.T) {
