@@ -51,7 +51,7 @@ func TestProjectAPI(t *testing.T) {
 		err = json.NewDecoder(resp.Body).Decode(&project)
 		c.Check(assert.NoError(t, err))
 
-		c.Check(assert.NotEmpty(t, project.ID, "Project ID should not be empty in response"))
+		c.Check(assert.NotEmpty(t, project.UUID, "Project ID should not be empty in response"))
 		c.Check(assert.Equal(t, payload.Name, project.Name, "name does not match expected value"))
 		c.Check(assert.Equal(t, payload.UserID, project.UserID, "user id does not match expected value"))
 
@@ -73,7 +73,7 @@ func TestProjectAPI(t *testing.T) {
 		var retrievedProject models.ProjectResponse
 		err = json.NewDecoder(resp.Body).Decode(&retrievedProject)
 		c.Check(assert.NoError(t, err))
-		c.Check(assert.Equal(t, retrievedProject.ID, project.UUID))
+		c.Check(assert.Equal(t, retrievedProject.UUID, project.UUID))
 		c.Check(assert.Equal(t, retrievedProject.UserID, user.ID))
 
 		utils.ProjectCleanup(repo, user)
