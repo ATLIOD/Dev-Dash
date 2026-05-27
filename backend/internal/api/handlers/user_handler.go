@@ -13,6 +13,8 @@ type UserHandler struct {
 	Service services.UserService
 }
 
+// TODO: need to figure out how to actually nest routers a stuff i think
+
 func (h *UserHandler) RegisterRoutes(r chi.Router) {
 	r.Route("/user", func(r chi.Router) {
 		r.Post("/", h.Create)
@@ -45,7 +47,7 @@ func (h *UserHandler) Get(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	user, err := h.Service.GetByID(r.Context(), userID)
+	user, err := h.Service.GetByUUID(r.Context(), userID)
 	if err != nil {
 		utils.WriteError(w, http.StatusInternalServerError, err.Error())
 		return

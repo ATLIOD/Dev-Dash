@@ -10,7 +10,7 @@ import (
 )
 
 type UserService interface {
-	GetByID(ctx context.Context, id string) (*models.UserResponse, error)
+	GetByUUID(ctx context.Context, id string) (*models.UserResponse, error)
 	GetByEmail(ctx context.Context, email string) (*models.UserResponse, error)
 	Create(ctx context.Context, req models.CreateUserRequest) (*models.UserResponse, error)
 	Update(ctx context.Context, id string, req models.UpdateUserRequest) (*models.UserResponse, error)
@@ -21,8 +21,9 @@ type userService struct {
 	userRepo repositories.UserRepository
 }
 
-func (s *userService) GetByID(ctx context.Context, id string) (*models.UserResponse, error) {
-	user, err := s.userRepo.GetByID(ctx, id)
+// TODO: change titles to uuid
+func (s *userService) GetByUUID(ctx context.Context, id string) (*models.UserResponse, error) {
+	user, err := s.userRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func (s *userService) Create(ctx context.Context, req models.CreateUserRequest) 
 }
 
 func (s *userService) Update(ctx context.Context, id string, req models.UpdateUserRequest) (*models.UserResponse, error) {
-	user, err := s.userRepo.GetByID(ctx, id)
+	user, err := s.userRepo.GetByUUID(ctx, id)
 	if err != nil {
 		return nil, err
 	}
