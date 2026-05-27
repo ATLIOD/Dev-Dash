@@ -1,7 +1,0 @@
-button {
-  background-color: var(--bg) !important;
-}
-
-button:hover {
-  color: var(--surface-color-darken);
-}

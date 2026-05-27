@@ -1,0 +1,30 @@
+.icon-textfield-wrapper {
+  position: relative;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+}
+
+input {
+  height: 30px;
+  width: 250px;
+  background-color: var(--surface-color);
+  border-radius: var(--spacing-medium);
+  border: none;
+  color: var(--primary-text);
+}
+
+input:focus {
+  outline: 1px solid var(--primary-color);
+}
+
+.icon-textfield-wrapper > input {
+  padding-left: 30px;
+}
+
+.textfield-icon {
+  position: absolute;
+  left: var(--spacing-small);
+  display: flex;
+  pointer-events: none;
+}

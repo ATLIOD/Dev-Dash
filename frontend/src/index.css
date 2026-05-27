@@ -11,7 +11,10 @@
   --spacing-medium: 8px;
   --spacing-large: 12px;
   --spacing-xlarge: 16px;
+  --spacing-xxlarge: 24px;
   --navbar-height: 80px;
+
+  --font-size-large: 24px;
 
   /* Defaults */
   --border: #e5e4e7;
