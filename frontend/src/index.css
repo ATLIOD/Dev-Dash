@@ -1,23 +1,39 @@
 :root {
-  --text: #6b6375;
-  --text-h: #08060d;
+  --primary-color: #ad7eff;
+  --secondary-color: ;
+  --primary-text: #6b6375;
+  --secondary-text: #08060d;
   --bg: #fff;
+  --surface-color: #f4f3ec;
+  --surface-color-darken: #b7b5ab;
+  --primary-button: #6a13ff;
+  --spacing-small: 4px;
+  --spacing-medium: 8px;
+  --spacing-large: 12px;
+  --spacing-xlarge: 16px;
+  --spacing-xxlarge: 24px;
+  --navbar-height: 80px;
+
+  --font-size-small: 12px;
+  --font-size-medium: 16px;
+  --font-size-large: 24px;
+
+  /* Defaults */
   --border: #e5e4e7;
-  --code-bg: #f4f3ec;
   --accent: #aa3bff;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
   --social-bg: rgba(244, 243, 236, 0.5);
   --shadow: rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
-  --sans: system-ui, "Segoe UI", Roboto, sans-serif;
+  --inter: "Inter", sans-serif;
   --heading: system-ui, "Segoe UI", Roboto, sans-serif;
   --mono: ui-monospace, Consolas, monospace;
 
-  font: 18px/145% var(--sans);
+  font: 18px/145% var(--inter);
   letter-spacing: 0.18px;
   color-scheme: light dark;
-  color: var(--text);
+  color: var(--primary-text);
   background: var(--bg);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -25,16 +41,21 @@
   -moz-osx-font-smoothing: grayscale;
 
   @media (max-width: 1024px) {
-    font-size: 16px;
+    font-size: var(--font-size-medium);
   }
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
+    --primary-color: #ad7eff;
+    --secondary-color: #6a13ff;
+    --primary-text: #ffffff;
+    --secondary-text: #595959ab;
     --bg: #16171d;
-    --border: #2e303a;
+    --surface-color: #2b3139;
+    --border: #2b313980;
+
+    /* Defaults */
     --code-bg: #1f2028;
     --accent: #c084fc;
     --accent-bg: rgba(192, 132, 252, 0.15);
@@ -60,8 +81,23 @@
   box-sizing: border-box;
 }
 
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter_24pt-Regular.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter_24pt-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
 body {
   margin: 0;
+  font-family: "Inter", sans-serif;
 }
 
 h1,

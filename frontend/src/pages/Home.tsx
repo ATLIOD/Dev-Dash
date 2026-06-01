@@ -2,7 +2,7 @@ import { useState } from "react";
 import reactLogo from "../assets/react.svg";
 import viteLogo from "../assets/vite.svg";
 import heroImg from "../assets/hero.png";
-import { Button } from "../components/Buttons.tsx";
+import { Button } from "../components/Buttons/Buttons.tsx";
 import "./__pages.css";
 
 // TO-DO #17: Create basic home page.
@@ -23,7 +23,11 @@ export default function Home() {
             Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
           </p>
         </div>
-        <Button className="counter" onClick={() => setCount((count) => count + 1)}>
+        <Button
+          baseClass={"outlined"}
+          className="counter"
+          onClick={() => setCount((count) => count + 1)}
+        >
           Count is {count}
         </Button>
       </section>
