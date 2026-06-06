@@ -15,6 +15,7 @@ type UserService interface {
 	Create(ctx context.Context, req models.CreateUserRequest) (*models.UserResponse, error)
 	Update(ctx context.Context, id string, req models.UpdateUserRequest) (*models.UserResponse, error)
 	Delete(ctx context.Context, id string) error
+	Authenticate(ctx context.Context, email, password string) (*models.User, error)
 }
 
 type userService struct {
@@ -80,4 +81,17 @@ func (s *userService) Delete(ctx context.Context, id string) error {
 		return err
 	}
 	return nil
+}
+
+func (s *userService) Authenticate(ctx context.Context, email, password string) (*models.User, error) {
+	user, err := s.userRepo.GetByEmail(ctx, email)
+	if err != nil {
+		return nil, errors.New("invalid credentials")
+	}
+
+	if err := utils.ComparePassword(user.PasswordHash, password); err != nil {
+		return nil, errors.New("invalid credentials")
+	}
+
+	return user, nil
 }
