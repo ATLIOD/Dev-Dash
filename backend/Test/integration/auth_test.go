@@ -86,6 +86,6 @@ func TestAuth(t *testing.T) {
 		var user models.UserResponse
 		err := json.NewDecoder(rr.Body).Decode(&user)
 		assert.NoError(t, err)
-		assert.Equal(t, "01", user.ID)
+		assert.Equal(t, "01", user.UUID)
 	})
 }
