@@ -25,7 +25,7 @@ func TestCORS(t *testing.T) {
 		User:    &handlers.UserHandler{},
 		Project: &handlers.ProjectHandler{},
 	}
-	router := NewRouter(h, corsConfig, tokenAuth)
+	router := api.NewRouter(h, corsConfig, tokenAuth)
 
 	t.Run("Allowed Origin", func(t *testing.T) {
 		req := httptest.NewRequest("GET", "/health", nil)
