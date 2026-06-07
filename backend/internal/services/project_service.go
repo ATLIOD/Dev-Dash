@@ -8,7 +8,7 @@ import (
 
 type ProjectService interface {
 	GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error)
-	GetAllByUserID(ctx context.Context, userID int64) ([]models.ProjectResponse, error)
+	GetAllByUserUUID(ctx context.Context, userID string) ([]*models.ProjectResponse, error)
 	Create(ctx context.Context, req models.CreateProjectRequest) (*models.ProjectResponse, error)
 	Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error)
 	Delete(ctx context.Context, id string) error
@@ -16,6 +16,7 @@ type ProjectService interface {
 
 type projectService struct {
 	projectRepo repositories.ProjectRepository
+	userRepo    repositories.UserRepository
 }
 
 func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.ProjectResponse, error) {
@@ -23,18 +24,21 @@ func (s *projectService) GetByUUID(ctx context.Context, id string) (*models.Proj
 	if err != nil {
 		return nil, err
 	}
-	resp := project.ToResponse()
-	return &resp, nil
+	return new(project.ToResponse()), nil
 }
 
-func (s *projectService) GetAllByUserID(ctx context.Context, userID int64) ([]models.ProjectResponse, error) {
-	projects, err := s.projectRepo.GetAllByUserID(ctx, userID)
+func (s *projectService) GetAllByUserUUID(ctx context.Context, userUUID string) ([]*models.ProjectResponse, error) {
+	user, err := s.userRepo.GetByUUID(ctx, userUUID)
 	if err != nil {
 		return nil, err
 	}
-	var resps []models.ProjectResponse
+	projects, err := s.projectRepo.GetAllByUserID(ctx, user.ID)
+	if err != nil {
+		return nil, err
+	}
+	var resps []*models.ProjectResponse
 	for _, p := range projects {
-		resps = append(resps, p.ToResponse())
+		resps = append(resps, new(p.ToResponse()))
 	}
 	return resps, nil
 }
@@ -53,8 +57,7 @@ func (s *projectService) Create(ctx context.Context, req models.CreateProjectReq
 	if err != nil {
 		return nil, err
 	}
-	resp := project.ToResponse()
-	return &resp, nil
+	return new(project.ToResponse()), nil
 }
 
 func (s *projectService) Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error) {
@@ -73,8 +76,7 @@ func (s *projectService) Update(ctx context.Context, id string, req models.Updat
 	if err != nil {
 		return nil, err
 	}
-	resp := project.ToResponse()
-	return &resp, nil
+	return new(project.ToResponse()), nil
 }
 
 func (s *projectService) Delete(ctx context.Context, id string) error {

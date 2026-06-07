@@ -10,6 +10,6 @@ type Service struct {
 func New(repo *repositories.Repository) *Service {
 	return &Service{
 		User:    &userService{userRepo: repo.User},
-		Project: &projectService{projectRepo: repo.Project},
+		Project: &projectService{projectRepo: repo.Project, userRepo: repo.User},
 	}
 }
