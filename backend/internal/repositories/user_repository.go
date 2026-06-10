@@ -66,9 +66,11 @@ func (r *userRepository) Create(ctx context.Context, user *models.User) error {
 	query := `
 		INSERT INTO users (name, email, password_hash)
 		VALUES ($1, $2, $3)
-		RETURNING id, uuid
+		RETURNING id, uuid, created_at, updated_at
 	`
-	err := r.db.QueryRow(ctx, query, user.Name, user.Email, user.PasswordHash).Scan(&user.ID, &user.UUID)
+	err := r.db.QueryRow(ctx, query, user.Name, user.Email, user.PasswordHash).Scan(
+		&user.ID, &user.UUID, &user.CreatedAt, &user.UpdatedAt,
+	)
 	if err != nil {
 		return err
 	}
@@ -78,10 +80,11 @@ func (r *userRepository) Create(ctx context.Context, user *models.User) error {
 func (r *userRepository) Update(ctx context.Context, user *models.User) error {
 	query := `
 		UPDATE users
-		SET name = $1, email = $2
+		SET name = $1, email = $2, updated_at = NOW()
 		WHERE uuid = $3
+		RETURNING updated_at
 	`
-	_, err := r.db.Exec(ctx, query, user.Name, user.Email, user.UUID)
+	err := r.db.QueryRow(ctx, query, user.Name, user.Email, user.UUID).Scan(&user.UpdatedAt)
 	if err != nil {
 		return err
 	}

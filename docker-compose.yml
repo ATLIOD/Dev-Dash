@@ -5,6 +5,8 @@ services:
       POSTGRES_DB: dev_dashdb
       POSTGRES_USER: web
       POSTGRES_PASSWORD: webpass
+      TZ: UTC
+      PGTZ: UTC
     ports:
       - "5432:5432"
     volumes:

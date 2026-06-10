@@ -52,9 +52,11 @@ func (r *projectRepository) Create(ctx context.Context, project *models.Project)
 	query := `
 		INSERT INTO projects (name, description, status, stack, repository_url, deployment_url, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
-		RETURNING id, uuid
+		RETURNING id, uuid, created_at, updated_at
 	`
-	err := r.db.QueryRow(ctx, query, project.Name, project.Description, project.Status, project.Stack, project.RepositoryURL, project.DeploymentURL, project.UserID).Scan(&project.ID, &project.UUID)
+	err := r.db.QueryRow(ctx, query, project.Name, project.Description, project.Status, project.Stack, project.RepositoryURL, project.DeploymentURL, project.UserID).Scan(
+		&project.ID, &project.UUID, &project.CreatedAt, &project.UpdatedAt,
+	)
 	if err != nil {
 		return err
 	}
@@ -66,8 +68,9 @@ func (r *projectRepository) Update(ctx context.Context, project *models.Project)
 		UPDATE projects
 		SET name = $1, description = $2, status = $3, stack = $4, repository_url = $5, deployment_url = $6, updated_at = NOW()
 		WHERE uuid = $7
+		RETURNING updated_at
 		`
-	_, err := r.db.Exec(ctx, query, project.Name, project.Description, project.Status, project.Stack, project.RepositoryURL, project.DeploymentURL, project.UUID)
+	err := r.db.QueryRow(ctx, query, project.Name, project.Description, project.Status, project.Stack, project.RepositoryURL, project.DeploymentURL, project.UUID).Scan(&project.UpdatedAt)
 	if err != nil {
 		return err
 	}

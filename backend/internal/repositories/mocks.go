@@ -2,6 +2,7 @@ package repositories
 
 import (
 	"DevDash/internal/models"
+	"DevDash/pkg/utils"
 	"context"
 	"errors"
 )
@@ -46,11 +47,15 @@ func (r *UserRepositoryMock) GetByEmail(ctx context.Context, email string) (*mod
 }
 
 func (r *UserRepositoryMock) Create(ctx context.Context, user *models.User) error {
+	now := utils.NowUTC()
+	user.CreatedAt = now
+	user.UpdatedAt = now
 	r.DB.Users[user.UUID] = *user
 	return nil
 }
 
 func (r *UserRepositoryMock) Update(ctx context.Context, user *models.User) error {
+	user.UpdatedAt = utils.NowUTC()
 	r.DB.Users[user.UUID] = *user
 	return nil
 }
@@ -92,11 +97,15 @@ func (r *ProjectRepositoryMock) GetAllByUserID(ctx context.Context, userID int64
 }
 
 func (r *ProjectRepositoryMock) Create(ctx context.Context, project *models.Project) error {
+	now := utils.NowUTC()
+	project.CreatedAt = now
+	project.UpdatedAt = now
 	r.DB.Projects[project.UUID] = *project
 	return nil
 }
 
 func (r *ProjectRepositoryMock) Update(ctx context.Context, project *models.Project) error {
+	project.UpdatedAt = utils.NowUTC()
 	r.DB.Projects[project.UUID] = *project
 	return nil
 }
