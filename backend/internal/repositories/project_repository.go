@@ -31,6 +31,7 @@ func (r *projectRepository) GetByID(ctx context.Context, id int64) (*models.Proj
 	if err != nil {
 		return nil, err
 	}
+	project.NormalizeTimestamps()
 	return &project, nil
 }
 
@@ -45,6 +46,7 @@ func (r *projectRepository) GetByUUID(ctx context.Context, uuid string) (*models
 	if err != nil {
 		return nil, err
 	}
+	project.NormalizeTimestamps()
 	return &project, nil
 }
 
@@ -105,6 +107,7 @@ func (r *projectRepository) GetAllByUserID(ctx context.Context, userID int64) ([
 		if err != nil {
 			return nil, err
 		}
+		p.NormalizeTimestamps()
 		projects = append(projects, p)
 	}
 

@@ -31,6 +31,7 @@ func (r *userRepository) GetByID(ctx context.Context, id int64) (*models.User, e
 	if err != nil {
 		return nil, err
 	}
+	user.NormalizeTimestamps()
 	return &user, nil
 }
 
@@ -45,6 +46,7 @@ func (r *userRepository) GetByUUID(ctx context.Context, id string) (*models.User
 	if err != nil {
 		return nil, err
 	}
+	user.NormalizeTimestamps()
 	return &user, nil
 }
 
@@ -59,6 +61,7 @@ func (r *userRepository) GetByEmail(ctx context.Context, email string) (*models.
 	if err != nil {
 		return nil, err
 	}
+	user.NormalizeTimestamps()
 	return &user, nil
 }
 
@@ -78,7 +81,7 @@ func (r *userRepository) Create(ctx context.Context, user *models.User) error {
 func (r *userRepository) Update(ctx context.Context, user *models.User) error {
 	query := `
 		UPDATE users
-		SET name = $1, email = $2
+		SET name = $1, email = $2, updated_at = NOW()
 		WHERE uuid = $3
 	`
 	_, err := r.db.Exec(ctx, query, user.Name, user.Email, user.UUID)

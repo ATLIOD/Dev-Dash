@@ -5,6 +5,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
@@ -28,6 +29,10 @@ func OpenDB(dbConfig config.DBConfig) (*pgxpool.Pool, error) {
 	poolConfig.MaxConns = int32(dbConfig.MaxConns)
 	poolConfig.MaxConnIdleTime = dbConfig.MaxConnIdleTime
 	poolConfig.MinConns = int32(dbConfig.MinConns)
+	poolConfig.AfterConnect = func(ctx context.Context, conn *pgx.Conn) error {
+		_, err := conn.Exec(ctx, "SET TIME ZONE 'UTC'")
+		return err
+	}
 
 	pool, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {

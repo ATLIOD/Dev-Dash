@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"DevDash/pkg/utils"
+	"time"
+)
 
 type Project struct {
 	ID            int64     `json:"id"`
@@ -48,9 +51,15 @@ type ProjectResponse struct {
 	UpdatedAt     time.Time `json:"updated_at"`
 }
 
+func (p *Project) NormalizeTimestamps() {
+	p.CreatedAt = utils.ToUTC(p.CreatedAt)
+	p.UpdatedAt = utils.ToUTC(p.UpdatedAt)
+}
+
 func (p *Project) ToResponse() ProjectResponse {
+	p.NormalizeTimestamps()
 	return ProjectResponse{
-		UUID:            p.UUID,
+		UUID:          p.UUID,
 		Name:          p.Name,
 		Description:   p.Description,
 		Status:        p.Status,

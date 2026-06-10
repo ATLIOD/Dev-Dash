@@ -57,7 +57,11 @@ func (s *userService) Create(ctx context.Context, req models.CreateUserRequest) 
 	if err != nil {
 		return nil, err
 	}
-	return new(user.ToResponse()), nil
+	created, err := s.userRepo.GetByUUID(ctx, user.UUID)
+	if err != nil {
+		return nil, err
+	}
+	return new(created.ToResponse()), nil
 }
 
 func (s *userService) Update(ctx context.Context, id string, req models.UpdateUserRequest) (*models.UserResponse, error) {
@@ -71,7 +75,11 @@ func (s *userService) Update(ctx context.Context, id string, req models.UpdateUs
 	if err != nil {
 		return nil, err
 	}
-	return new(user.ToResponse()), nil
+	updated, err := s.userRepo.GetByUUID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return new(updated.ToResponse()), nil
 }
 
 func (s *userService) Delete(ctx context.Context, id string) error {

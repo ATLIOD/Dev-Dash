@@ -1,6 +1,9 @@
 package models
 
-import "time"
+import (
+	"DevDash/pkg/utils"
+	"time"
+)
 
 type User struct {
 	ID           int64     `json:"id"`
@@ -31,9 +34,15 @@ type UserResponse struct {
 	UpdatedAt time.Time `json:"updated_at"`
 }
 
+func (u *User) NormalizeTimestamps() {
+	u.CreatedAt = utils.ToUTC(u.CreatedAt)
+	u.UpdatedAt = utils.ToUTC(u.UpdatedAt)
+}
+
 func (u *User) ToResponse() UserResponse {
+	u.NormalizeTimestamps()
 	return UserResponse{
-		UUID:        u.UUID,
+		UUID:      u.UUID,
 		Name:      u.Name,
 		Email:     u.Email,
 		CreatedAt: u.CreatedAt,

@@ -2,8 +2,10 @@ package repositories
 
 import (
 	"DevDash/internal/models"
+	"DevDash/pkg/utils"
 	"context"
 	"errors"
+	"fmt"
 )
 
 func NewMockRepo(db *models.MockDB) *Repository {
@@ -46,11 +48,22 @@ func (r *UserRepositoryMock) GetByEmail(ctx context.Context, email string) (*mod
 }
 
 func (r *UserRepositoryMock) Create(ctx context.Context, user *models.User) error {
+	if user.UUID == "" {
+		user.UUID = fmt.Sprintf("user-%d", len(r.DB.Users)+1)
+	}
+	if user.ID == 0 {
+		user.ID = int64(len(r.DB.Users) + 1)
+	}
+	now := utils.NowUTC()
+	user.CreatedAt = now
+	user.UpdatedAt = now
 	r.DB.Users[user.UUID] = *user
 	return nil
 }
 
 func (r *UserRepositoryMock) Update(ctx context.Context, user *models.User) error {
+	user.UpdatedAt = utils.NowUTC()
+	user.NormalizeTimestamps()
 	r.DB.Users[user.UUID] = *user
 	return nil
 }
@@ -92,11 +105,22 @@ func (r *ProjectRepositoryMock) GetAllByUserID(ctx context.Context, userID int64
 }
 
 func (r *ProjectRepositoryMock) Create(ctx context.Context, project *models.Project) error {
+	if project.UUID == "" {
+		project.UUID = fmt.Sprintf("project-%d", len(r.DB.Projects)+1)
+	}
+	if project.ID == 0 {
+		project.ID = int64(len(r.DB.Projects) + 1)
+	}
+	now := utils.NowUTC()
+	project.CreatedAt = now
+	project.UpdatedAt = now
 	r.DB.Projects[project.UUID] = *project
 	return nil
 }
 
 func (r *ProjectRepositoryMock) Update(ctx context.Context, project *models.Project) error {
+	project.UpdatedAt = utils.NowUTC()
+	project.NormalizeTimestamps()
 	r.DB.Projects[project.UUID] = *project
 	return nil
 }

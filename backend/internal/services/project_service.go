@@ -57,7 +57,11 @@ func (s *projectService) Create(ctx context.Context, req models.CreateProjectReq
 	if err != nil {
 		return nil, err
 	}
-	return new(project.ToResponse()), nil
+	created, err := s.projectRepo.GetByUUID(ctx, project.UUID)
+	if err != nil {
+		return nil, err
+	}
+	return new(created.ToResponse()), nil
 }
 
 func (s *projectService) Update(ctx context.Context, id string, req models.UpdateProjectRequest) (*models.ProjectResponse, error) {
@@ -76,7 +80,11 @@ func (s *projectService) Update(ctx context.Context, id string, req models.Updat
 	if err != nil {
 		return nil, err
 	}
-	return new(project.ToResponse()), nil
+	updated, err := s.projectRepo.GetByUUID(ctx, id)
+	if err != nil {
+		return nil, err
+	}
+	return new(updated.ToResponse()), nil
 }
 
 func (s *projectService) Delete(ctx context.Context, id string) error {
