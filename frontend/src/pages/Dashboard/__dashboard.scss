@@ -1,0 +1,66 @@
+@use "../../styles/_mixins" as *;
+
+.pinned-projects {
+  @include header;
+
+  .project-list {
+    @include row;
+    @include flex-wrap;
+    margin-top: var(--spacing-small);
+
+    .project-tile {
+      @include row;
+      @include tile;
+      width: calc((100% / 4) - 8px);
+
+      .project-overview {
+        @include column;
+        padding: var(--spacing-small) 0;
+      }
+    }
+  }
+}
+
+.all-projects {
+  @include header;
+  @include column;
+
+  .panel-heading {
+    @include row;
+    @include space-between;
+  }
+
+  .project-list-panel {
+    @include row;
+    @include outline;
+
+    gap: var(--spacing-xlarge);
+    padding: var(--spacing-medium);
+    margin: var(--spacing-medium) 0;
+
+    .project-overview {
+      @include tile;
+      width: calc((100% / 3) - 8px);
+      padding: var(--spacing-medium);
+
+      .project-header {
+        @include row;
+        @include space-between;
+
+        .project-actions {
+          @include flex-center;
+        }
+      }
+
+      .project-details {
+        @include column;
+        font-size: var(--font-size-small);
+
+        .project-chips {
+          @include row;
+          gap: var(--spacing-small);
+        }
+      }
+    }
+  }
+}

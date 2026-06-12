@@ -1,0 +1,63 @@
+@mixin row {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin flex-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-medium);
+}
+
+@mixin overflow-ellipsis {
+  @include overflow-hidden;
+  text-overflow: ellipsis;
+}
+
+@mixin overflow-hidden {
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin outline($color: var(--border), $spacing: var(--spacing-small)) {
+  border: 1px solid $color;
+  border-radius: $spacing;
+}
+
+@mixin light-bg($bg: var(--primary-color)) {
+  background-color: color-mix(in srgb, $bg 30%, transparent);
+}
+
+@mixin tile {
+  @include outline;
+  background-color: var(--surface-color);
+  cursor: pointer;
+  min-width: 150px;
+}
+
+@mixin header {
+  @include column;
+  justify-content: start;
+  text-align: start;
+}
+
+@mixin space-between {
+  @include flex-center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+@mixin text-hover {
+  color: var(--surface-color-darken);
+}

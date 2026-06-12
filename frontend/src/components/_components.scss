@@ -1,0 +1,10 @@
+@use "../styles/_mixins" as *;
+
+.chip {
+  @include outline(var(--secondary-color), var(--spacing-medium));
+  @include light-bg;
+
+  color: var(--secondary-color);
+  font-size: var(--font-size-small);
+  padding: 1px;
+}

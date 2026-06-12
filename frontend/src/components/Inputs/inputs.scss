@@ -1,0 +1,30 @@
+@use "../../styles/_mixins" as *;
+
+.icon-textfield-wrapper {
+  position: relative;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+
+  .textfield-icon {
+    position: absolute;
+    left: var(--spacing-small);
+    display: flex;
+    pointer-events: none;
+  }
+
+  input {
+    padding-left: 30px;
+
+    height: 30px;
+    width: 250px;
+    background-color: var(--surface-color);
+    border-radius: var(--spacing-medium);
+    border: none;
+    color: var(--primary-text);
+
+    &:focus {
+      outline: 1px solid var(--primary-color);
+    }
+  }
+}

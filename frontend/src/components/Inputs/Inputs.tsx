@@ -1,5 +1,5 @@
 import React from "react";
-import "./inputs.css";
+import "./inputs.scss";
 
 type TextFieldProps = React.InputHTMLAttributes<HTMLInputElement> & {
   className?: string;
