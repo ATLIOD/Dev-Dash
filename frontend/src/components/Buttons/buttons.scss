@@ -1,3 +1,5 @@
+@use "../../styles/_mixins" as *;
+
 button {
   font: var(--inter);
   color: var(--primary-text);
@@ -9,10 +11,10 @@ button {
 
 .text {
   background-color: var(--bg);
-}
 
-.text:hover {
-  color: var(--surface-color-darken);
+  &:hover {
+    @include text-hover;
+  }
 }
 
 .icon-button {
@@ -23,18 +25,20 @@ button {
 
 .primary {
   color: #ffffff;
+  fill: #ffffff;
   background-color: var(--primary-button);
-}
+  height: 32px;
 
-.primary:hover {
-  background-color: color-mix(in srgb, var(--primary-button) 80%, black);
+  &:hover {
+    background-color: color-mix(in srgb, var(--primary-button) 80%, black);
+  }
 }
 
 .outlined {
+  @include light-bg;
   border: 1px solid var(--primary-button);
-  background-color: color-mix(in srgb, var(--primary-color) 30%, transparent);
-}
 
-.outlined:hover {
-  background-color: color-mix(in srgb, var(--primary-color) 70%, transparent);
+  &:hover {
+    background-color: color-mix(in srgb, var(--primary-color) 70%, transparent);
+  }
 }

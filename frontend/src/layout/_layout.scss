@@ -1,0 +1,23 @@
+@use "../styles/_mixins" as *;
+
+header {
+  @include flex-center;
+  height: var(--navbar-height);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  margin: var(--spacing-xsmall);
+
+  .header-wrapper {
+    @include space-between;
+
+    .nav-buttons {
+      @include flex-center;
+      gap: var(--spacing-medium);
+    }
+  }
+}
+
+footer {
+  align-items: center;
+  font-size: var(--font-size-small);
+}
