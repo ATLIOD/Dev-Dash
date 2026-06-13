@@ -15,12 +15,12 @@ func NewMockDB() *MockDB {
 	db.Users["01"] = User{
 		ID: 1, UUID: "01", Name: "User 1",
 		Email: "user1@example.com", PasswordHash: "123123",
-		CreatedAt: time.Now(), UpdatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC(),
 	}
 	db.Users["02"] = User{
 		ID: 2, UUID: "02", Name: "User 2",
 		Email: "user2@example.com", PasswordHash: "123123",
-		CreatedAt: time.Now(), UpdatedAt: time.Now(),
+		CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC(),
 	}
 
 	db.Projects["01"] = Project{
@@ -28,7 +28,7 @@ func NewMockDB() *MockDB {
 		Description: "this is a description for project 1",
 		Status:      "in progress", Stack: "golang, react",
 		RepositoryURL: "example.com", DeploymentURL: "example.com",
-		UserID: 1, CreatedAt: time.Now(), UpdatedAt: time.Now(),
+		UserID: 1, CreatedAt: time.Now().UTC(), UpdatedAt: time.Now().UTC(),
 	}
 	return db
 }

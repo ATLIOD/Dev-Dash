@@ -36,7 +36,7 @@ func (u *User) ToResponse() UserResponse {
 		UUID:        u.UUID,
 		Name:      u.Name,
 		Email:     u.Email,
-		CreatedAt: u.CreatedAt,
-		UpdatedAt: u.UpdatedAt,
+		CreatedAt: u.CreatedAt.UTC(),
+		UpdatedAt: u.UpdatedAt.UTC(),
 	}
 }

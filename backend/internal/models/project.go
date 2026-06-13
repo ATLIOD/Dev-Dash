@@ -58,7 +58,7 @@ func (p *Project) ToResponse() ProjectResponse {
 		RepositoryURL: p.RepositoryURL,
 		DeploymentURL: p.DeploymentURL,
 		UserID:        p.UserID,
-		CreatedAt:     p.CreatedAt,
-		UpdatedAt:     p.UpdatedAt,
+		CreatedAt:     p.CreatedAt.UTC(),
+		UpdatedAt:     p.UpdatedAt.UTC(),
 	}
 }
