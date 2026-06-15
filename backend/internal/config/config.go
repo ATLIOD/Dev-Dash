@@ -9,12 +9,14 @@ import (
 	"time"
 
 	"github.com/go-chi/cors"
+	"github.com/go-chi/jwtauth/v5"
 	"github.com/joho/godotenv"
 )
 
 type Config struct {
 	DB         DBConfig
 	CorsConfig *cors.Cors
+	TokenAuth  *jwtauth.JWTAuth
 }
 
 type DBConfig struct {
@@ -23,6 +25,11 @@ type DBConfig struct {
 	MaxConnIdleTime time.Duration
 	MinConns        int
 	Seed            bool
+}
+
+type JWTConfig struct {
+	Secret    string
+	ExpiresIn time.Duration
 }
 
 func Load() *Config {
@@ -62,6 +69,12 @@ func Load() *Config {
 
 	corsConfig := middleware.GetCorsConfig(allowedOrigins, allowedMethods, allowedHeaders, exposedHeaders)
 
+	jwtSecret := os.Getenv("JWT_SECRET")
+	if jwtSecret == "" {
+		jwtSecret = "default-secret-change-me"
+	}
+	tokenAuth := jwtauth.New("HS256", []byte(jwtSecret), nil)
+
 	return &Config{
 		DB: DBConfig{
 			Dsn:             pgDSN,
@@ -71,5 +84,6 @@ func Load() *Config {
 			Seed:            Seed,
 		},
 		CorsConfig: corsConfig,
+		TokenAuth:  tokenAuth,
 	}
 }
