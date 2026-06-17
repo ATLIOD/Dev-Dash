@@ -24,6 +24,7 @@
 .all-projects {
   @include header;
   @include column;
+  height: 100%;
 
   .panel-heading {
     @include row;
@@ -33,15 +34,20 @@
   .project-list-panel {
     @include row;
     @include outline;
+    @include flex-wrap;
+    @include overflow-hidden;
+    height: 100%;
 
     gap: var(--spacing-xlarge);
-    padding: var(--spacing-medium);
-    margin: var(--spacing-medium) 0;
+    padding: var(--spacing-large);
+    margin: var(--spacing-medium) 0 0 0;
+    align-content: flex-start;
 
     .project-overview {
       @include tile;
-      width: calc((100% / 3) - 8px);
+      width: 31.25%;
       padding: var(--spacing-medium);
+      height: max-content;
 
       .project-header {
         @include row;

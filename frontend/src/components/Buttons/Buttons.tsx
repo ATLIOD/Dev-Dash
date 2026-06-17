@@ -8,7 +8,7 @@ type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 export const Button = ({ baseClass = "text", className, children, ...props }: ButtonProps) => {
   return (
-    <button className={`${baseClass} ${className ?? ""}`} {...props}>
+    <button className={baseClass + (className ? ` ${className}` : "")} {...props}>
       {children}
     </button>
   );

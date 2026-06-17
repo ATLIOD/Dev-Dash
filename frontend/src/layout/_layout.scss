@@ -17,7 +17,18 @@ header {
   }
 }
 
+main {
+  @include overflow-hidden;
+  padding: var(--spacing-large) var(--spacing-large) 0 var(--spacing-large);
+  height: calc(100svh - var(--navbar-height) - 30px);
+
+  @media (max-width: 1024px) {
+    padding: 32px 20px 24px;
+  }
+}
+
 footer {
   align-items: center;
   font-size: var(--font-size-small);
+  margin-top: auto;
 }

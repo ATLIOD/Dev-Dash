@@ -13,7 +13,7 @@ export const Home = () => {
   ];
 
   return (
-    <div style={{ padding: "var(--spacing-large)", gap: "var(--spacing-large);" }}>
+    <div className="project-list-wrapper">
       <PinnedPanel projectList={projectList} />
       <ProjectPanel projectList={projectList} />
     </div>

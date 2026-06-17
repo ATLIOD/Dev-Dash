@@ -1,7 +1,7 @@
 import { IconButton } from "../../components/Buttons/Buttons";
-import { Chip } from "../../components/Chips";
+import { Chip, ChipType } from "../../components/Chips";
 import { AddIcon, VertKebab } from "../../components/Icons";
-import type { Project } from "../../Managers/Project";
+import { Status, type Project } from "../../Managers/Project";
 
 export const ProjectPanel = ({ projectList }: { projectList: Project[] }) => {
   return (
@@ -10,7 +10,7 @@ export const ProjectPanel = ({ projectList }: { projectList: Project[] }) => {
         <span>All Projects</span>
         <IconButton
           baseClass="primary"
-          icon={<AddIcon color="var(--bg)" />}
+          icon={<AddIcon color="#fff" />}
           style={{ fontSize: "var(--font-size-medium)", paddingRight: "var(--font-size-small)" }}
         >
           New Project
@@ -27,6 +27,18 @@ export const ProjectPanel = ({ projectList }: { projectList: Project[] }) => {
 };
 
 const ProjectTile = ({ project }: { project: Project }) => {
+  const status = project.status;
+  const chipType: ChipType =
+    status === Status.Active
+      ? ChipType.Active
+      : status === Status.Planning
+        ? ChipType.Planning
+        : status === Status.Maintaining
+          ? ChipType.Maintaining
+          : status === Status.Complete
+            ? ChipType.Primary
+            : ChipType.Secondary;
+
   // TO-DO: Navigate to project page.
   return (
     <div className="project-overview">
@@ -39,7 +51,7 @@ const ProjectTile = ({ project }: { project: Project }) => {
           {project.name}
         </span>
         <div className="project-actions">
-          <Chip>{project.status}</Chip>
+          <Chip baseClass={chipType}>{project.status}</Chip>
           <IconButton
             baseClass="text"
             style={{ backgroundColor: "var(--surface-color)" }}

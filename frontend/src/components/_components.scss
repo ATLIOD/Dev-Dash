@@ -1,10 +1,36 @@
 @use "../styles/_mixins" as *;
 
-.chip {
-  @include outline(var(--secondary-color), var(--spacing-medium));
-  @include light-bg;
+.chip-wrapper {
+  @mixin chip($color) {
+    @include flex-center;
+    @include outline($color);
+    @include light-bg($color);
+    color: $color;
+    height: fit-content;
+    font-size: var(--font-size-small);
+    border-radius: 6px;
+    padding: 0 2px;
+    height: 18px;
+  }
 
-  color: var(--secondary-color);
-  font-size: var(--font-size-small);
-  padding: 1px;
+  .planning {
+    @include chip(var(--warning-color));
+  }
+
+  .active {
+    @include chip(var(--success-color));
+  }
+
+  .maintaining {
+    @include chip(var(--info-color));
+  }
+
+  .primary {
+    @include chip(var(--primary-color));
+  }
+
+  .secondary {
+    @include chip(var(--primary-text));
+    border: color-mix(in srgb, var(--primary-text) 30%, transparent);
+  }
 }
