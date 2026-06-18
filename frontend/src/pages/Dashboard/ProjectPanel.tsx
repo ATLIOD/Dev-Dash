@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { IconButton } from "../../components/Buttons/Buttons";
 import { Chip, ChipType } from "../../components/Chips";
 import { AddIcon, VertKebab } from "../../components/Icons";
 import { Status, type Project } from "../../Managers/Project";
+import { Menu, MenuItem } from "../../components/Menu";
 
 export const ProjectPanel = ({ projectList }: { projectList: Project[] }) => {
   return (
@@ -39,6 +41,16 @@ const ProjectTile = ({ project }: { project: Project }) => {
             ? ChipType.Primary
             : ChipType.Secondary;
 
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(undefined);
+
+  function HandleOnMenuClick(e: React.MouseEvent<HTMLButtonElement>) {
+    return setAnchorEl(e.currentTarget);
+  }
+
+  function HandleOnDelete() {}
+  function HandleOnEdit() {}
+  function HandleOnPin() {}
+
   // TO-DO: Navigate to project page.
   return (
     <div className="project-overview">
@@ -54,11 +66,18 @@ const ProjectTile = ({ project }: { project: Project }) => {
           <Chip baseClass={chipType}>{project.status}</Chip>
           <IconButton
             baseClass="text"
-            style={{ backgroundColor: "var(--surface-color)" }}
+            style={{ backgroundColor: "transparent" }}
             icon={<VertKebab color="var(--primary-text)" />}
+            onClick={HandleOnMenuClick}
           />
         </div>
       </div>
+
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+        <MenuItem onClick={HandleOnPin}>Pin Project</MenuItem>
+        <MenuItem onClick={HandleOnEdit}>Edit Project</MenuItem>
+        <MenuItem onClick={HandleOnDelete}>Delete Project</MenuItem>
+      </Menu>
 
       {/* Update with actual project details. */}
       <div className="project-details">

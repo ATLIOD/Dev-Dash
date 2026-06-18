@@ -9,8 +9,9 @@
   --success-color: #01b54c;
   --info-color: #01a5c9;
   --bg: #fff;
-  --surface-color: #f4f3ec;
-  --surface-color-darken: #b7b5ab;
+  --surface-color: #fafafa;
+  --surface-color-darken: #f5f3f5;
+  --surface-hover: #e8e4ef;
   --primary-button: #6a13ff;
   --spacing-small: 4px;
   --spacing-medium: 8px;
@@ -45,11 +46,12 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --primary-text: #ffffff;
+    --primary-text: #d9d9d9;
     --secondary-text: #595959ab;
-    --bg: #16171d;
+    --bg: #0f1416;
     --surface-color: #2b3139;
-    --border: #2b313980;
+    --surface-color-darken: #15191d;
+    --border: #2b3139ab;
     --warning-color: #f6d500;
     --success-color: #00f666;
     --info-color: #00c9f6;

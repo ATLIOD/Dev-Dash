@@ -30,7 +30,7 @@
   overflow: hidden;
 }
 
-@mixin outline($color: var(--border), $spacing: var(--spacing-small)) {
+@mixin outline($color: var(--border), $spacing: var(--spacing-medium)) {
   border: 1px solid $color;
   border-radius: $spacing;
 }
@@ -41,7 +41,7 @@
 
 @mixin tile {
   @include outline;
-  background-color: var(--surface-color);
+  background-color: var(--surface-color-darken);
   cursor: pointer;
   min-width: 150px;
 }

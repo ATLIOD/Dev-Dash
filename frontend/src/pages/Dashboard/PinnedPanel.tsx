@@ -23,7 +23,7 @@ const ProjectSummaryTile = ({ project }: { project: Project }) => {
       <IconButton
         icon={<FolderIcon size={Size.xlarge} />}
         style={{
-          backgroundColor: "var(--surface-color)",
+          backgroundColor: "transparent",
         }}
       />
       <div className="project-overview">
