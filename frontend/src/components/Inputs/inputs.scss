@@ -27,4 +27,8 @@
       outline: 1px solid var(--primary-color);
     }
   }
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
 }

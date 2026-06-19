@@ -7,6 +7,10 @@ button {
   border-radius: var(--spacing-medium);
   cursor: pointer;
   margin: var(--spacing-xsmall);
+
+  &:focus-visible {
+    outline: none;
+  }
 }
 
 .text {

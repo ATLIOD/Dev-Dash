@@ -3,7 +3,7 @@ import { IconButton } from "../../components/Buttons/Buttons";
 import { Chip, ChipType } from "../../components/Chips";
 import { AddIcon, VertKebab } from "../../components/Icons";
 import { Status, type Project } from "../../Managers/Project";
-import { Menu, MenuItem } from "../../components/Menu";
+import { Menu, MenuItem } from "@mui/material";
 
 export const ProjectPanel = ({ projectList }: { projectList: Project[] }) => {
   return (
