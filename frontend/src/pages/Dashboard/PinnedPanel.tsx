@@ -21,11 +21,12 @@ const ProjectSummaryTile = ({ project }: { project: Project }) => {
   return (
     <div className="project-tile">
       <IconButton
-        icon={<FolderIcon size={Size.xlarge} />}
         style={{
           backgroundColor: "transparent",
         }}
-      />
+      >
+        <FolderIcon size={Size.xlarge} />
+      </IconButton>
       <div className="project-overview">
         <span
           style={{

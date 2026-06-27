@@ -11,15 +11,17 @@ export const NavBar = () => {
         <div className="nav-buttons">
           <IconButton
             baseClass="text"
-            icon={<TerminalIcon size={Size.xlarge} />}
-            style={{ fontSize: "var(--font-size-large)" }}
+            style={{ fontSize: "var(--font-size-large)", height: "40px" }}
           >
+            <TerminalIcon size={Size.xlarge} />
             Dev Dash
           </IconButton>
-          <IconButton baseClass="text" icon={<DashboardIcon />}>
+          <IconButton baseClass="text">
+            <DashboardIcon />
             Dashboard
           </IconButton>
-          <IconButton baseClass="text" icon={<CodeIcon />}>
+          <IconButton baseClass="text">
+            <CodeIcon />
             Snippets
           </IconButton>
         </div>
