@@ -1,34 +1,41 @@
-import { IconButton } from "../components/Buttons/Buttons";
-import { CodeIcon, DashboardIcon, SearchIcon, Size, TerminalIcon } from "../components/Icons";
-import { IconTextField } from "../components/Inputs/Inputs";
+import { InputAdornment, TextField } from "@mui/material";
+import {
+  CodeOutlined,
+  SearchOutlined,
+  SpaceDashboardOutlined,
+  TerminalOutlined,
+} from "@mui/icons-material";
 import "./_layout.scss";
 import { UserProfile } from "./UserProfile";
+import { NavButton } from "../components/Buttons/Buttons";
+import { Size } from "../components/Icons";
 
 export const NavBar = () => {
   return (
     <header>
       <div className="header-wrapper">
         <div className="nav-buttons">
-          <IconButton
-            baseClass="text"
-            style={{ fontSize: "var(--font-size-large)", height: "40px" }}
-          >
-            <TerminalIcon size={Size.xlarge} />
-            Dev Dash
-          </IconButton>
-          <IconButton baseClass="text">
-            <DashboardIcon />
-            Dashboard
-          </IconButton>
-          <IconButton baseClass="text">
-            <CodeIcon />
-            Snippets
-          </IconButton>
+          <NavButton startIcon={<TerminalOutlined />} size={Size.xlarge}>
+            <span style={{ fontSize: "var(--font-size-large)" }}>Dev Dash</span>
+          </NavButton>
+          <NavButton startIcon={<SpaceDashboardOutlined />}>Dashboard</NavButton>
+          <NavButton startIcon={<CodeOutlined />}>Snippets</NavButton>
         </div>
 
         <div className="nav-buttons">
           {/* TODO: Move search bar to a separate component. */}
-          <IconTextField icon={<SearchIcon size={Size.small} />} placeholder="Search..." />
+          <TextField
+            slotProps={{
+              input: {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <SearchOutlined />
+                  </InputAdornment>
+                ),
+              },
+            }}
+            placeholder="Search..."
+          />
           <UserProfile />
         </div>
       </div>

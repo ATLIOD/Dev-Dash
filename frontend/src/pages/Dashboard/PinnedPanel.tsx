@@ -1,15 +1,15 @@
-import { IconButton } from "../../components/Buttons/Buttons";
-import { FolderIcon, Size } from "../../components/Icons";
-import { type Project } from "../../Managers/Project";
+import { IconButton } from "@mui/material";
+import { type Project } from "../../Managers/ProjectManager";
 import "./__dashboard.scss";
+import { FolderIcon, Size } from "../../components/Icons";
 
 export const PinnedPanel = ({ projectList }: { projectList: Project[] }) => {
   return (
     <div className="pinned-projects">
       <span>Pinned Projects</span>
       <div className="project-list">
-        {projectList.map((x) => (
-          <ProjectSummaryTile project={x} />
+        {projectList.map((x, i) => (
+          <ProjectSummaryTile project={x} key={i} />
         ))}
       </div>
     </div>

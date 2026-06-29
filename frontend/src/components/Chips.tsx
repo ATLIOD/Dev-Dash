@@ -1,30 +1,13 @@
-import type { HtmlHTMLAttributes } from "react";
-import "./_components.scss";
+import { Chip } from "@mui/material";
 
 export enum ChipType {
-  Planning = "planning",
-  Active = "active",
-  Maintaining = "maintaining",
+  Planning = "warning",
+  Active = "success",
+  Maintaining = "info",
   Primary = "primary",
   Secondary = "secondary",
 }
 
-type ChipProps = HtmlHTMLAttributes<HTMLSpanElement> & {
-  className?: string;
-  baseClass?: ChipType;
-};
-
-export const Chip = ({
-  baseClass = ChipType.Secondary,
-  className,
-  children,
-  ...props
-}: ChipProps) => {
-  return (
-    <div className="chip-wrapper">
-      <span {...props} className={`${baseClass}` + (className ? ` ${className}` : "")}>
-        {children}
-      </span>
-    </div>
-  );
+export const ChipBase = ({ ...props }) => {
+  return <Chip variant="outlined" {...props} />;
 };

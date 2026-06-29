@@ -11,11 +11,13 @@
     .project-tile {
       @include row;
       @include tile;
+      align-items: center;
       width: calc((100% / 4) - 8px);
+      padding: var(--spacing-small);
+      gap: var(--spacing-medium);
 
       .project-overview {
         @include column;
-        padding: var(--spacing-small) 0;
       }
     }
   }
@@ -48,13 +50,15 @@
       width: 31.25%;
       padding: var(--spacing-medium);
       height: max-content;
+      min-height: 80px;
 
       .project-header {
         @include row;
         @include space-between;
+        @include flex-start;
 
         .project-actions {
-          @include flex-center;
+          @include flex-start;
         }
       }
 
@@ -66,6 +70,30 @@
           @include row;
           gap: var(--spacing-small);
         }
+      }
+    }
+  }
+}
+
+.MuiDialog-paper {
+  width: 475px;
+  height: 575px;
+
+  .project-details {
+    @include column;
+    gap: var(--spacing-medium);
+
+    .details-column {
+      @include column;
+    }
+
+    .details-row {
+      @include row;
+      width: 100%;
+      gap: var(--spacing-medium);
+
+      .details-column {
+        width: 50%;
       }
     }
   }

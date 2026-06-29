@@ -1,55 +1,99 @@
 import { useState } from "react";
-import { IconButton } from "../../components/Buttons/Buttons";
-import { Chip, ChipType } from "../../components/Chips";
-import { AddIcon, VertKebab } from "../../components/Icons";
-import { Status, type Project } from "../../Managers/Project";
-import { Menu, MenuItem } from "@mui/material";
+import { Status, type Project } from "../../Managers/ProjectManager";
+import { Button, Menu, MenuItem } from "@mui/material";
+import "./__dashboard.scss";
+import { AddOutlined } from "@mui/icons-material";
+import { MenuButton } from "../../components/Buttons/Buttons";
+import { ChipBase, ChipType } from "../../components/Chips";
+import { ProjectDetailsDialog } from "./ProjectDetailsDialog";
 
-export const ProjectPanel = ({ projectList }: { projectList: Project[] }) => {
+export const ProjectPanel = ({
+  projectList,
+  onCreate,
+  onDelete,
+  onEdit,
+}: {
+  projectList: Project[];
+  onCreate: (p: Project) => void;
+  onDelete: (p: Project) => void;
+  onEdit: (p: Project) => void;
+}) => {
+  const [open, setOpen] = useState<boolean>(false);
+
+  function HandleOnClose() {
+    setOpen(!open);
+  }
+
+  function HandleOnCreate(p: Project) {
+    onCreate(p);
+    HandleOnClose();
+  }
+
   return (
     <div className="all-projects">
       <div className="panel-heading">
         <span>All Projects</span>
-        <IconButton
-          baseClass="primary"
-          icon={<AddIcon color="#fff" />}
-          style={{ fontSize: "var(--font-size-medium)", paddingRight: "var(--font-size-small)" }}
+        <Button
+          onClick={() => setOpen(!open)}
+          color="primary"
+          startIcon={<AddOutlined />}
+          variant="contained"
         >
           New Project
-        </IconButton>
+        </Button>
       </div>
 
       <div className="project-list-panel">
-        {projectList.map((x) => (
-          <ProjectTile project={x} />
+        {projectList.map((x, i) => (
+          <ProjectTile onDelete={onDelete} onEdit={onEdit} project={x} key={i} />
         ))}
       </div>
+
+      <ProjectDetailsDialog
+        open={open}
+        onClose={HandleOnClose}
+        onConfirm={HandleOnCreate}
+        key={crypto.randomUUID()}
+      />
     </div>
   );
 };
 
-const ProjectTile = ({ project }: { project: Project }) => {
-  const status = project.status;
-  const chipType: ChipType =
-    status === Status.Active
-      ? ChipType.Active
-      : status === Status.Planning
-        ? ChipType.Planning
-        : status === Status.Maintaining
-          ? ChipType.Maintaining
-          : status === Status.Complete
-            ? ChipType.Primary
-            : ChipType.Secondary;
+const ProjectTile = ({
+  project,
+  onDelete,
+  onEdit,
+}: {
+  project: Project;
+  onDelete: (p: Project) => void;
+  onEdit: (p: Project) => void;
+}) => {
+  const chipType: ChipType = GetChipTypeFromStatus(project.status);
 
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(undefined);
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | undefined>(undefined);
+  const [open, setOpen] = useState<boolean>(false);
+
+  function EditProject(project: Project) {
+    onEdit(project);
+    ToggleDialog();
+  }
 
   function HandleOnMenuClick(e: React.MouseEvent<HTMLButtonElement>) {
     return setAnchorEl(e.currentTarget);
   }
 
-  function HandleOnDelete() {}
-  function HandleOnEdit() {}
-  function HandleOnPin() {}
+  function HandleOnDelete() {
+    onDelete(project);
+    setAnchorEl(undefined);
+  }
+  function HandleOnPin() {
+    setAnchorEl(undefined);
+  }
+
+  function ToggleDialog() {
+    setAnchorEl(undefined);
+    setOpen(!open);
+  }
 
   // TO-DO: Navigate to project page.
   return (
@@ -63,30 +107,47 @@ const ProjectTile = ({ project }: { project: Project }) => {
           {project.name}
         </span>
         <div className="project-actions">
-          <Chip baseClass={chipType}>{project.status}</Chip>
-          <IconButton
-            baseClass="text"
-            style={{ backgroundColor: "transparent" }}
-            icon={<VertKebab color="var(--primary-text)" />}
-            onClick={HandleOnMenuClick}
-          />
+          <ChipBase label={project.status} color={chipType} />
+          <MenuButton onClick={HandleOnMenuClick} />
         </div>
       </div>
 
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(null)}>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={() => setAnchorEl(undefined)}>
         <MenuItem onClick={HandleOnPin}>Pin Project</MenuItem>
-        <MenuItem onClick={HandleOnEdit}>Edit Project</MenuItem>
+        <MenuItem onClick={ToggleDialog}>Edit Project</MenuItem>
         <MenuItem onClick={HandleOnDelete}>Delete Project</MenuItem>
       </Menu>
 
       {/* Update with actual project details. */}
       <div className="project-details">
-        This is a project description.
+        {project.description}
         <div className="project-chips">
-          <Chip>React</Chip>
-          <Chip>Go</Chip>
+          {project?.stack?.map((x) => (
+            <ChipBase label={x} />
+          ))}
         </div>
       </div>
+
+      <ProjectDetailsDialog
+        key={project.uuid}
+        open={open}
+        onClose={ToggleDialog}
+        project={project}
+        onConfirm={EditProject}
+      />
     </div>
   );
 };
+
+function GetChipTypeFromStatus(status: Status) {
+  switch (status) {
+    case Status.Active:
+      return ChipType.Active;
+    case Status.Planning:
+      return ChipType.Planning;
+    case Status.Complete:
+      return ChipType.Primary;
+    case Status.Maintaining:
+      return ChipType.Maintaining;
+  }
+}

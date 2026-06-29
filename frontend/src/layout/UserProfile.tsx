@@ -1,10 +1,14 @@
-import { IconButton } from "../components/Buttons/Buttons";
+import { IconButton } from "@mui/material";
 import { Size, UserIcon } from "../components/Icons";
 
 export const UserProfile = () => {
   // TODO: Add menu for profile and settings.
   return (
-    <IconButton style={{ marginRight: "var(--spacing-small)" }}>
+    <IconButton
+      sx={{
+        padding: 0,
+      }}
+    >
       <UserIcon size={Size.large} />
     </IconButton>
   );
