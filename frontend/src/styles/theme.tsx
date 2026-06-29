@@ -1,27 +1,5 @@
 import { alpha, createTheme } from "@mui/material/styles";
 
-declare module "@mui/material/styles" {
-  interface Theme {
-    iconSizes: {
-      xs: number;
-      sm: number;
-      md: number;
-      lg: number;
-      xl: number;
-    };
-  }
-
-  interface ThemeOptions {
-    iconSizes?: {
-      xs?: number;
-      sm?: number;
-      md?: number;
-      lg?: number;
-      xl?: number;
-    };
-  }
-}
-
 export const theme = createTheme({
   colorSchemes: {
     light: {
