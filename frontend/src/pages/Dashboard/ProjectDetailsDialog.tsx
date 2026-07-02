@@ -11,7 +11,7 @@ export const ProjectDetailsDialog = ({
 }: {
   open: boolean;
   onClose: () => void;
-  onConfirm: (value?: Project) => void;
+  onConfirm: (value: Project) => void;
   project?: Project;
 }) => {
   const title = !project ? "New" : "Edit";
