@@ -1,106 +1,49 @@
 import { useState } from "react";
-import reactLogo from "../assets/react.svg";
-import viteLogo from "../assets/vite.svg";
-import heroImg from "../assets/hero.png";
-import { Button } from "../components/Buttons/Buttons.tsx";
-import "./__pages.css";
+import { Status, type Project } from "../Managers/ProjectManager.ts";
+import "./_pages.scss";
+import { PinnedPanel } from "./Dashboard/PinnedPanel.tsx";
+import { ProjectPanel } from "./Dashboard/ProjectPanel.tsx";
 
-// TO-DO #17: Create basic home page.
-export default function Home() {
-  const [count, setCount] = useState(0);
+export const Home = () => {
+  // TODO: Move all this state logic into the ProjectManager.
+  const [projectList, setProjectList] = useState<Project[]>([
+    {
+      uuid: crypto.randomUUID(),
+      name: "Project 1",
+      description: "Project description",
+      status: Status.Active,
+      stack: ["React", "Go"],
+      repo: "www.repo.com",
+      deploy: "www.deploy.com",
+    },
+    { uuid: crypto.randomUUID(), name: "Project 2", status: Status.Planning },
+    { uuid: crypto.randomUUID(), name: "Project 3", status: Status.Maintaining },
+    { uuid: crypto.randomUUID(), name: "Project 4", status: Status.Complete },
+    { uuid: crypto.randomUUID(), name: "Project 5", status: Status.Active },
+  ]);
+
+  function HandleOnCreate(value: Project) {
+    setProjectList([...projectList, value]);
+  }
+
+  function HandleOnDelete(value: Project) {
+    setProjectList(projectList.filter((x) => x.uuid !== value.uuid));
+  }
+
+  function HandleOnEdit(value: Project) {
+    let updated = projectList.filter((x) => x.uuid !== value.uuid);
+    setProjectList([...updated, value]);
+  }
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <Button
-          baseClass={"outlined"}
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </Button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg className="button-icon" role="presentation" aria-hidden="true">
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <div className="project-list-wrapper">
+      <PinnedPanel projectList={projectList} />
+      <ProjectPanel
+        projectList={projectList}
+        onCreate={HandleOnCreate}
+        onDelete={HandleOnDelete}
+        onEdit={HandleOnEdit}
+      />
+    </div>
   );
-}
+};

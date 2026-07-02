@@ -1,0 +1,6 @@
+@use "../styles/_mixins" as *;
+
+.project-list-wrapper {
+  @include column;
+  height: 100%;
+}

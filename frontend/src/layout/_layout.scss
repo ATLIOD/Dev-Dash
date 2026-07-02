@@ -1,0 +1,38 @@
+@use "../styles/_mixins" as *;
+
+header {
+  @include flex-center;
+  height: var(--navbar-height);
+  border-bottom: 1px solid var(--border);
+  align-items: center;
+  margin: var(--spacing-xsmall);
+
+  .header-wrapper {
+    @include space-between;
+
+    .nav-buttons {
+      @include flex-center;
+      gap: var(--spacing-medium);
+
+      @media (max-width: 1024px) {
+        gap: 0;
+      }
+    }
+  }
+}
+
+main {
+  @include overflow-hidden;
+  padding: var(--spacing-large) var(--spacing-large) 0 var(--spacing-large);
+  height: calc(100svh - var(--navbar-height) - 30px);
+
+  @media (max-width: 1024px) {
+    padding: var(--spacing-medium) var(--spacing-medium) 0 var(--spacing-medium);
+  }
+}
+
+footer {
+  align-items: center;
+  font-size: var(--font-size-small);
+  margin-top: auto;
+}

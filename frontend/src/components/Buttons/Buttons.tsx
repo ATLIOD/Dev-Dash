@@ -1,27 +1,62 @@
-import type { ButtonHTMLAttributes, ReactNode } from "react";
-import "./buttons.css";
+import { CloseOutlined, MoreVertOutlined } from "@mui/icons-material";
+import { Button, IconButton } from "@mui/material";
+import { Size } from "../Icons";
+import type { ReactNode } from "react";
 
-type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  className?: string;
-  baseClass?: "text" | "primary" | "outlined";
-};
-
-export const Button = ({ baseClass = "text", className, children, ...props }: ButtonProps) => {
+export const MenuButton = ({
+  onClick,
+}: {
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+}) => {
   return (
-    <button className={`${baseClass} ${className ?? ""}`} {...props}>
-      {children}
-    </button>
+    <IconButton
+      className="menu-button"
+      onClick={onClick}
+      style={{
+        padding: 0,
+      }}
+    >
+      <MoreVertOutlined />
+    </IconButton>
   );
 };
 
-type IconButtonProps = ButtonProps & {
-  icon: ReactNode;
+export const CloseButton = ({ onClick }: { onClick: () => void }) => {
+  return (
+    <IconButton className="menu-button" onClick={onClick}>
+      <CloseOutlined />
+    </IconButton>
+  );
 };
 
-export const IconButton = ({ icon, baseClass, className, children, ...props }: IconButtonProps) => {
+export const NavButton = ({
+  size = Size.large,
+  startIcon,
+  endIcon,
+  children,
+  ...props
+}: {
+  size?: Size;
+  startIcon?: ReactNode;
+  endIcon?: ReactNode;
+  children: ReactNode;
+}) => {
   return (
-    <Button baseClass={baseClass} className={`icon-button ${className ?? ""}`} {...props}>
-      {icon}
+    <Button
+      sx={{
+        color: "text.primary",
+        "& .MuiButton-startIcon .MuiSvgIcon-root": {
+          color: "primary.main",
+          fontSize: size,
+        },
+        "& .MuiButton-startIcon": {
+          margin: 0,
+        },
+      }}
+      {...props}
+      startIcon={startIcon}
+      endIcon={endIcon}
+    >
       {children}
     </Button>
   );

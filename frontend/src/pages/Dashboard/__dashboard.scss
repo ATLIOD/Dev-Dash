@@ -1,0 +1,100 @@
+@use "../../styles/_mixins" as *;
+
+.pinned-projects {
+  @include header;
+
+  .project-list {
+    @include row;
+    @include flex-wrap;
+    margin-top: var(--spacing-small);
+
+    .project-tile {
+      @include row;
+      @include tile;
+      align-items: center;
+      width: calc((100% / 4) - 8px);
+      padding: var(--spacing-small);
+      gap: var(--spacing-medium);
+
+      .project-overview {
+        @include column;
+      }
+    }
+  }
+}
+
+.all-projects {
+  @include header;
+  @include column;
+  height: 100%;
+
+  .panel-heading {
+    @include row;
+    @include space-between;
+  }
+
+  .project-list-panel {
+    @include row;
+    @include outline;
+    @include flex-wrap;
+    @include overflow-hidden;
+    height: 100%;
+
+    gap: var(--spacing-xlarge);
+    padding: var(--spacing-large);
+    margin: var(--spacing-medium) 0 0 0;
+    align-content: flex-start;
+
+    .project-overview {
+      @include tile;
+      width: 31.25%;
+      padding: var(--spacing-medium);
+      height: max-content;
+      min-height: 80px;
+
+      .project-header {
+        @include row;
+        @include space-between;
+        @include flex-start;
+
+        .project-actions {
+          @include flex-start;
+        }
+      }
+
+      .project-details {
+        @include column;
+        font-size: var(--font-size-small);
+
+        .project-chips {
+          @include row;
+          gap: var(--spacing-small);
+        }
+      }
+    }
+  }
+}
+
+.MuiDialog-paper {
+  width: 475px;
+  height: 575px;
+
+  .project-details {
+    @include column;
+    gap: var(--spacing-medium);
+
+    .details-column {
+      @include column;
+    }
+
+    .details-row {
+      @include row;
+      width: 100%;
+      gap: var(--spacing-medium);
+
+      .details-column {
+        width: 50%;
+      }
+    }
+  }
+}
